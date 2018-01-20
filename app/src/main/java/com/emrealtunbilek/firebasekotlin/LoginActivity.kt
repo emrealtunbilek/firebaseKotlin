@@ -43,6 +43,12 @@ class LoginActivity : AppCompatActivity() {
 
                                 if (p0.isSuccessful) {
                                     progressBarGizle()
+
+                                    if(!p0.result.user.isEmailVerified){
+                                        FirebaseAuth.getInstance().signOut()
+                                    }
+
+
                                    // Toast.makeText(this@LoginActivity, "Başarılı Giriş :" + FirebaseAuth.getInstance().currentUser?.email, Toast.LENGTH_SHORT).show()
 
                                 } else {
@@ -89,7 +95,6 @@ class LoginActivity : AppCompatActivity() {
 
                     }else {
                         Toast.makeText(this@LoginActivity, "Mail adresinizi onaylayıp öyle giriş yapın", Toast.LENGTH_SHORT).show()
-                        FirebaseAuth.getInstance().signOut()
                     }
                 }
 
