@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import com.google.firebase.auth.FirebaseAuth
+import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -15,6 +16,16 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         initAuthStateListener()
+        setKullaniciBilgileri()
+    }
+
+    private fun setKullaniciBilgileri() {
+        var kullanici=FirebaseAuth.getInstance().currentUser
+        if(kullanici != null){
+            tvKullaniciAdi.text=if(kullanici.displayName.isNullOrEmpty()) "Tanımlanmadı" else kullanici.displayName
+            tvKullaniciEmail.text=kullanici.email
+            tvKullaniciUid.text=kullanici.uid
+        }
     }
 
     private fun initAuthStateListener() {
