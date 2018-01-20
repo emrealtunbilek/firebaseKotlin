@@ -38,6 +38,7 @@ class RegisterActivity : Activity() {
                         if (p0.isSuccessful) {
                             progressBarGizle()
                             Toast.makeText(this@RegisterActivity, "Üye kaydedildi:" + FirebaseAuth.getInstance().currentUser?.uid, Toast.LENGTH_SHORT).show()
+                            onayMailiGonder()
                             FirebaseAuth.getInstance().signOut()
                         } else {
                             progressBarGizle()
@@ -46,6 +47,28 @@ class RegisterActivity : Activity() {
                     }
                 })
 
+
+    }
+
+    private fun onayMailiGonder(){
+
+        var kullanici=FirebaseAuth.getInstance().currentUser
+
+        if(kullanici != null){
+
+            kullanici.sendEmailVerification()
+                    .addOnCompleteListener(object : OnCompleteListener<Void>{
+                        override fun onComplete(p0: Task<Void>) {
+                            if(p0.isSuccessful){
+                                Toast.makeText(this@RegisterActivity, "Mail kutunuzu kontrol edin, mailiniz onaylayın", Toast.LENGTH_SHORT).show()
+                            }else {
+                                Toast.makeText(this@RegisterActivity, "Mail göndeirlirken sorun oluştu " + p0.exception?.message, Toast.LENGTH_SHORT).show()
+                            }
+                        }
+
+                    })
+
+        }
 
     }
 

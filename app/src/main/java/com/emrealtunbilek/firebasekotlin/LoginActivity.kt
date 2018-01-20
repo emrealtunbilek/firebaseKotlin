@@ -14,9 +14,12 @@ import kotlinx.android.synthetic.main.activity_login.*
 
 class LoginActivity : AppCompatActivity() {
 
+    lateinit var mAuthStateListener: FirebaseAuth.AuthStateListener
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
+        initMyAuthStateListener()
 
 
         tvKayitOl.setOnClickListener {
@@ -36,10 +39,10 @@ class LoginActivity : AppCompatActivity() {
                                 if (p0.isSuccessful) {
                                     progressBarGizle()
                                     Toast.makeText(this@LoginActivity, "Başarılı Giriş :" + FirebaseAuth.getInstance().currentUser?.email, Toast.LENGTH_SHORT).show()
-                                    FirebaseAuth.getInstance().signOut()
+
                                 } else {
                                     progressBarGizle()
-                                    Toast.makeText(this@LoginActivity,"Hatalı Giriş : "+p0.exception?.message,Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(this@LoginActivity, "Hatalı Giriş : " + p0.exception?.message, Toast.LENGTH_SHORT).show()
                                 }
 
                             }
@@ -61,5 +64,39 @@ class LoginActivity : AppCompatActivity() {
 
     private fun progressBarGizle() {
         progressBarLogin.visibility = View.INVISIBLE
+    }
+
+    private fun initMyAuthStateListener() {
+
+        mAuthStateListener = object : FirebaseAuth.AuthStateListener {
+            override fun onAuthStateChanged(p0: FirebaseAuth) {
+                var kullanici= p0.currentUser
+
+                if(kullanici != null){
+
+                    if(kullanici.isEmailVerified){
+                        Toast.makeText(this@LoginActivity, "Mail onaylanmış giriş yapılabilir", Toast.LENGTH_SHORT).show()
+                        var intent=Intent(this@LoginActivity, MainActivity::class.java)
+                        startActivity(intent)
+                        finish()
+
+                    }else {
+                        Toast.makeText(this@LoginActivity, "Mail adresinizi onaylayıp öyle giriş yapın", Toast.LENGTH_SHORT).show()
+                        FirebaseAuth.getInstance().signOut()
+                    }
+                }
+
+            }
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        FirebaseAuth.getInstance().addAuthStateListener(mAuthStateListener)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        FirebaseAuth.getInstance().removeAuthStateListener(mAuthStateListener)
     }
 }
