@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <item android:id="@+id/menuHesapAyalari" android:title="Hesap Ayarları"></item>
     <item android:id="@+id/menuCikisyap" android:title="Çıkış yap"></item>
 </menu>

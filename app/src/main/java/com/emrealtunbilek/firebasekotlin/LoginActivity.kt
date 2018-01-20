@@ -32,6 +32,11 @@ class LoginActivity : AppCompatActivity() {
             dialogGoster.show(supportFragmentManager,"gosterdialog")
         }
 
+        tvSifreTekrarYolla.setOnClickListener {
+            var dialogSifreyiTekrarGonder=SifremiUnuttumDialogFragment()
+            dialogSifreyiTekrarGonder.show(supportFragmentManager,"gosterdialogsifre")
+        }
+
         btnGirisYap.setOnClickListener {
 
             if (etMail.text.isNotEmpty() && etSifre.text.isNotEmpty()) {

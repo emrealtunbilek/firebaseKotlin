@@ -52,6 +52,13 @@ class MainActivity : AppCompatActivity() {
                 return true
             }
 
+            R.id.menuHesapAyalari -> {
+
+                var intent=Intent(this,KullaniciAyarlariActivity::class.java)
+                startActivity(intent)
+                return true
+            }
+
         }
 
 
