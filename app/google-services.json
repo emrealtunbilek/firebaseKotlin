@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "1015244463202",
+    "firebase_url": "https://fir-kotlin-4913f.firebaseio.com",
+    "project_id": "fir-kotlin-4913f",
+    "storage_bucket": "fir-kotlin-4913f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1015244463202:android:071d01e14adaeb31",
+        "android_client_info": {
+          "package_name": "com.emrealtunbilek.firebasekotlin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1015244463202-56chd2vaudqbm6hh1octv2rsj78qu4vt.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.emrealtunbilek.firebasekotlin",
+            "certificate_hash": "b7c5b8560bad7fb5d5b0e6350fce6f19f2ddf596"
+          }
+        },
+        {
+          "client_id": "1015244463202-ubtr794l50c64fvcpcf5cule253e5n27.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDL-r6rp7X2984-IIEWfSVcj8rl3wcPeTA"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1015244463202-ubtr794l50c64fvcpcf5cule253e5n27.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
