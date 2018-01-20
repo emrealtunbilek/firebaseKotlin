@@ -1,5 +1,6 @@
 package com.emrealtunbilek.firebasekotlin
 
+import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
@@ -42,7 +43,7 @@ class KullaniciAyarlariActivity : AppCompatActivity() {
 
         btnDegisiklikleriKaydet.setOnClickListener {
 
-            if (etDetayName.text.toString().isNotEmpty() && etDetaySifre.text.toString().isNotEmpty()) {
+            if (etDetayName.text.toString().isNotEmpty()) {
 
                 if (!etDetayName.text.toString().equals(kullanici.displayName.toString())) {
 
@@ -71,39 +72,39 @@ class KullaniciAyarlariActivity : AppCompatActivity() {
 
         btnSifreveyaMailGuncelle.setOnClickListener {
 
-           if(etDetaySifre.text.toString().isNotEmpty()){
+            if (etDetaySifre.text.toString().isNotEmpty()) {
 
-               var credential=EmailAuthProvider.getCredential(kullanici.email.toString(), etDetaySifre.text.toString())
-               kullanici.reauthenticate(credential)
-                       .addOnCompleteListener { task->
+                var credential = EmailAuthProvider.getCredential(kullanici.email.toString(), etDetaySifre.text.toString())
+                kullanici.reauthenticate(credential)
+                        .addOnCompleteListener { task ->
 
-                           if(task.isSuccessful){
+                            if (task.isSuccessful) {
 
-                               guncellelayout.visibility= View.VISIBLE
-                               btnMailGuncelle.setOnClickListener {
+                                guncellelayout.visibility = View.VISIBLE
+                                btnMailGuncelle.setOnClickListener {
 
-                                   mailAdresiniGuncelle()
-
-
-                               }
-
-                               btnSifreGuncelle.setOnClickListener {
-                                   sifreBilgisiniGuncelle()
-                               }
-
-                           }else {
-
-                               Toast.makeText(this@KullaniciAyarlariActivity, "Şuanki şifrenizi yanlış girdiniz", Toast.LENGTH_SHORT).show()
-                               guncellelayout.visibility= View.INVISIBLE
-                           }
+                                    mailAdresiniGuncelle()
 
 
-                       }
+                                }
+
+                                btnSifreGuncelle.setOnClickListener {
+                                    sifreBilgisiniGuncelle()
+                                }
+
+                            } else {
+
+                                Toast.makeText(this@KullaniciAyarlariActivity, "Şuanki şifrenizi yanlış girdiniz", Toast.LENGTH_SHORT).show()
+                                guncellelayout.visibility = View.INVISIBLE
+                            }
 
 
-           } else {
-               Toast.makeText(this@KullaniciAyarlariActivity, "Güncellemeler için geçerli şifrenizi yazmalısınız", Toast.LENGTH_SHORT).show()
-           }
+                        }
+
+
+            } else {
+                Toast.makeText(this@KullaniciAyarlariActivity, "Güncellemeler için geçerli şifrenizi yazmalısınız", Toast.LENGTH_SHORT).show()
+            }
 
 
         }
@@ -111,25 +112,58 @@ class KullaniciAyarlariActivity : AppCompatActivity() {
 
     private fun sifreBilgisiniGuncelle() {
 
-        var kullanici=FirebaseAuth.getInstance().currentUser!!
+        var kullanici = FirebaseAuth.getInstance().currentUser!!
 
-        if(kullanici != null){
+        if (kullanici != null) {
             kullanici.updatePassword(etyeniSifre.text.toString())
-                    .addOnCompleteListener { task->
+                    .addOnCompleteListener { task ->
                         Toast.makeText(this@KullaniciAyarlariActivity, "Şifreniz değiştirildi tekrar giriş yapın", Toast.LENGTH_SHORT).show()
+                        FirebaseAuth.getInstance().signOut()
+                        loginSayfasinaYonlendir()
                     }
         }
 
     }
 
     private fun mailAdresiniGuncelle() {
-        var kullanici=FirebaseAuth.getInstance().currentUser!!
+        var kullanici = FirebaseAuth.getInstance().currentUser!!
 
-        if(kullanici != null){
-            kullanici.updateEmail(etYenimail.text.toString())
-                    .addOnCompleteListener { task->
-                        Toast.makeText(this@KullaniciAyarlariActivity, "Mail adresi değişti! tekrar giriş yapın", Toast.LENGTH_SHORT).show()
+        if (kullanici != null) {
+
+            FirebaseAuth.getInstance().fetchProvidersForEmail(etYenimail.text.toString())
+                    .addOnCompleteListener { task ->
+
+                        if (task.isSuccessful) {
+
+                            if (task.getResult().providers?.size == 1) {
+                                Toast.makeText(this@KullaniciAyarlariActivity, "Email Kullanımda", Toast.LENGTH_SHORT).show()
+                            } else {
+                                kullanici.updateEmail(etYenimail.text.toString())
+                                        .addOnCompleteListener { task ->
+
+                                            Toast.makeText(this@KullaniciAyarlariActivity, "Mail adresi değişti! tekrar giriş yapın", Toast.LENGTH_SHORT).show()
+                                            FirebaseAuth.getInstance().signOut()
+                                            loginSayfasinaYonlendir()
+                                        }
+                            }
+
+
+                        } else {
+
+                            Toast.makeText(this@KullaniciAyarlariActivity, "Email Güncellenemedi", Toast.LENGTH_SHORT).show()
+                        }
+
+
                     }
+
+
         }
+    }
+
+    fun loginSayfasinaYonlendir() {
+
+        var intent = Intent(this@KullaniciAyarlariActivity, LoginActivity::class.java)
+        startActivity(intent)
+        finish()
     }
 }

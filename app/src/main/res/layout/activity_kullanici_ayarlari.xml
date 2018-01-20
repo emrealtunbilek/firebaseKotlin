@@ -157,5 +157,19 @@
             android:text="Maili Guncelle"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/etyeniSifre" />
+
+        <TextView
+            android:id="@+id/textView10"
+            android:layout_width="295dp"
+            android:layout_height="39dp"
+            android:layout_marginBottom="32dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginStart="16dp"
+            android:text="Not : Burada yapılan değişikliklerden sonra sisteme tekrar giriş yapmanız gerekecektir."
+            android:textAlignment="textStart"
+            android:textStyle="bold|italic"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
     </android.support.constraint.ConstraintLayout>
 </android.support.constraint.ConstraintLayout>
