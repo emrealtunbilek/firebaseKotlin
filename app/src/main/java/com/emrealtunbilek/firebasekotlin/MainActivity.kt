@@ -16,7 +16,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         initAuthStateListener()
-        setKullaniciBilgileri()
+
     }
 
     private fun setKullaniciBilgileri() {
@@ -83,6 +83,7 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         kullaniciyiKontrolEt()
+        setKullaniciBilgileri()
     }
 
     private fun kullaniciyiKontrolEt() {
@@ -107,4 +108,6 @@ class MainActivity : AppCompatActivity() {
             FirebaseAuth.getInstance().removeAuthStateListener(myAuthStateListener)
         }
     }
+
+
 }
