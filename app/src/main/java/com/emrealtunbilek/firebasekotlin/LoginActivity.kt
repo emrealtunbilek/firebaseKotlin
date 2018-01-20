@@ -27,6 +27,11 @@ class LoginActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+        tvOnaymailiniTekrarGonder.setOnClickListener {
+            var dialogGoster=OnayMailTekrarGonderFragment()
+            dialogGoster.show(supportFragmentManager,"gosterdialog")
+        }
+
         btnGirisYap.setOnClickListener {
 
             if (etMail.text.isNotEmpty() && etSifre.text.isNotEmpty()) {
@@ -38,7 +43,7 @@ class LoginActivity : AppCompatActivity() {
 
                                 if (p0.isSuccessful) {
                                     progressBarGizle()
-                                    Toast.makeText(this@LoginActivity, "Başarılı Giriş :" + FirebaseAuth.getInstance().currentUser?.email, Toast.LENGTH_SHORT).show()
+                                   // Toast.makeText(this@LoginActivity, "Başarılı Giriş :" + FirebaseAuth.getInstance().currentUser?.email, Toast.LENGTH_SHORT).show()
 
                                 } else {
                                     progressBarGizle()
@@ -56,6 +61,8 @@ class LoginActivity : AppCompatActivity() {
 
 
         }
+
+
     }
 
     private fun progressBarGoster() {
