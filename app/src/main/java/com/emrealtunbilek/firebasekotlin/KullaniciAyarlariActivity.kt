@@ -45,6 +45,8 @@ class KullaniciAyarlariActivity : AppCompatActivity() {
 
             if (etDetayName.text.toString().isNotEmpty()) {
 
+                kullanici = FirebaseAuth.getInstance().currentUser!!
+
                 if (!etDetayName.text.toString().equals(kullanici.displayName.toString())) {
 
                     var bilgileriGuncelle = UserProfileChangeRequest.Builder()
