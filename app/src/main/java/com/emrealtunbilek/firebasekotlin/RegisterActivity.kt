@@ -1,6 +1,7 @@
 package com.emrealtunbilek.firebasekotlin
 
 import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -8,6 +9,7 @@ import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
 import kotlinx.android.synthetic.main.activity_register.*
 
 class RegisterActivity : Activity() {
@@ -37,9 +39,28 @@ class RegisterActivity : Activity() {
                     override fun onComplete(p0: Task<AuthResult>) {
                         if (p0.isSuccessful) {
                             progressBarGizle()
-                            Toast.makeText(this@RegisterActivity, "Üye kaydedildi:" + FirebaseAuth.getInstance().currentUser?.uid, Toast.LENGTH_SHORT).show()
                             onayMailiGonder()
-                            FirebaseAuth.getInstance().signOut()
+
+                            var veritabaninaEklenecekKullanici=Kullanici()
+                            veritabaninaEklenecekKullanici.isim=etMail.text.toString().substring(0,etMail.text.toString().indexOf("@"))
+                            veritabaninaEklenecekKullanici.kullanici_id=FirebaseAuth.getInstance().currentUser?.uid
+                            veritabaninaEklenecekKullanici.profil_resmi=""
+                            veritabaninaEklenecekKullanici.telefon="123"
+                            veritabaninaEklenecekKullanici.seviye="1"
+
+                            FirebaseDatabase.getInstance().reference
+                                    .child("kullanici")
+                                    .child(FirebaseAuth.getInstance().currentUser?.uid)
+                                    .setValue(veritabaninaEklenecekKullanici).addOnCompleteListener { task->
+
+                                if(task.isSuccessful){
+                                    Toast.makeText(this@RegisterActivity, "Üye kaydedildi:" + FirebaseAuth.getInstance().currentUser?.uid, Toast.LENGTH_SHORT).show()
+                                    FirebaseAuth.getInstance().signOut()
+                                    loginSayfasinaYonlendir()
+                                }
+
+                            }
+
                         } else {
                             progressBarGizle()
                             Toast.makeText(this@RegisterActivity, "Üye kaydedilirken sorun olustu:" + p0.exception?.message, Toast.LENGTH_SHORT).show()
@@ -78,5 +99,11 @@ class RegisterActivity : Activity() {
 
     private fun progressBarGizle() {
         progressBar.visibility = View.INVISIBLE
+    }
+    private fun loginSayfasinaYonlendir() {
+
+        var intent = Intent(this@RegisterActivity, LoginActivity::class.java)
+        startActivity(intent)
+        finish()
     }
 }
