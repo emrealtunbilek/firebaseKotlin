@@ -6,25 +6,25 @@ import android.os.Bundle
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.UserProfileChangeRequest
-import kotlinx.android.synthetic.main.activity_kullanici_ayarlari.*
-import android.util.Log
 import android.view.View
-import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.EmailAuthProvider
+import com.google.firebase.database.FirebaseDatabase
+import kotlinx.android.synthetic.main.activity_kullanici.*
+
 
 
 class KullaniciAyarlariActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_kullanici_ayarlari)
+        setContentView(R.layout.activity_kullanici)
 
         var kullanici = FirebaseAuth.getInstance().currentUser!!
+        tvMailAdresi.text=kullanici?.email
 
-        etDetayName.setText(kullanici.displayName.toString())
 
 
-        btnSifreGonder.setOnClickListener {
+        tvSifremiUnuttum.setOnClickListener {
 
             FirebaseAuth.getInstance().sendPasswordResetEmail(FirebaseAuth.getInstance().currentUser?.email.toString())
                     .addOnCompleteListener { task ->
@@ -43,46 +43,54 @@ class KullaniciAyarlariActivity : AppCompatActivity() {
 
         btnDegisiklikleriKaydet.setOnClickListener {
 
-            if (etDetayName.text.toString().isNotEmpty()) {
+            kullanici = FirebaseAuth.getInstance().currentUser!!
 
-                kullanici = FirebaseAuth.getInstance().currentUser!!
+            if (etKullaniciAdi.text.toString().isNotEmpty()) {
 
-                if (!etDetayName.text.toString().equals(kullanici.displayName.toString())) {
+
 
                     var bilgileriGuncelle = UserProfileChangeRequest.Builder()
-                            .setDisplayName(etDetayName.text.toString())
+                            .setDisplayName(etKullaniciAdi.text.toString())
                             .build()
                     kullanici.updateProfile(bilgileriGuncelle)
                             .addOnCompleteListener { task ->
                                 if (task.isSuccessful) {
+                                 FirebaseDatabase.getInstance().reference
+                                         .child("kullanici")
+                                         .child(FirebaseAuth.getInstance().currentUser?.uid)
+                                         .child("isim")
+                                         .setValue(etKullaniciAdi.text.toString())
                                     Toast.makeText(this@KullaniciAyarlariActivity, "Değişiklikler Yapıldı", Toast.LENGTH_SHORT).show()
                                 }
                             }
+            }else {
+                Toast.makeText(this@KullaniciAyarlariActivity, "Kullanıcı adını doldurunuz", Toast.LENGTH_SHORT).show()
+            }
 
+            if(etKullaniciTelefon.text.toString().isNotEmpty()) run {
 
-                }
+                FirebaseDatabase.getInstance().reference
+                        .child("kullanici")
+                        .child(FirebaseAuth.getInstance().currentUser?.uid)
+                        .child("telefon")
+                        .setValue(etKullaniciTelefon.text.toString())
 
-
-            } else {
-
-                Toast.makeText(this@KullaniciAyarlariActivity, "Boş alanları doldurunuz", Toast.LENGTH_SHORT).show()
 
             }
 
-
         }
 
-        btnSifreveyaMailGuncelle.setOnClickListener {
+        tvMailSifreGuncelle.setOnClickListener {
 
-            if (etDetaySifre.text.toString().isNotEmpty()) {
+            if (etKullaniciSuankiSifre.text.toString().isNotEmpty()) {
 
-                var credential = EmailAuthProvider.getCredential(kullanici.email.toString(), etDetaySifre.text.toString())
+                var credential = EmailAuthProvider.getCredential(kullanici.email.toString(), etKullaniciSuankiSifre.text.toString())
                 kullanici.reauthenticate(credential)
                         .addOnCompleteListener { task ->
 
                             if (task.isSuccessful) {
 
-                                guncellelayout.visibility = View.VISIBLE
+                                guncelleLayout.visibility = View.VISIBLE
                                 btnMailGuncelle.setOnClickListener {
 
                                     mailAdresiniGuncelle()
@@ -97,7 +105,7 @@ class KullaniciAyarlariActivity : AppCompatActivity() {
                             } else {
 
                                 Toast.makeText(this@KullaniciAyarlariActivity, "Şuanki şifrenizi yanlış girdiniz", Toast.LENGTH_SHORT).show()
-                                guncellelayout.visibility = View.INVISIBLE
+                                guncelleLayout.visibility = View.INVISIBLE
                             }
 
 
@@ -117,7 +125,7 @@ class KullaniciAyarlariActivity : AppCompatActivity() {
         var kullanici = FirebaseAuth.getInstance().currentUser!!
 
         if (kullanici != null) {
-            kullanici.updatePassword(etyeniSifre.text.toString())
+            kullanici.updatePassword(etYeniSifre.text.toString())
                     .addOnCompleteListener { task ->
                         Toast.makeText(this@KullaniciAyarlariActivity, "Şifreniz değiştirildi tekrar giriş yapın", Toast.LENGTH_SHORT).show()
                         FirebaseAuth.getInstance().signOut()
@@ -132,7 +140,7 @@ class KullaniciAyarlariActivity : AppCompatActivity() {
 
         if (kullanici != null) {
 
-            FirebaseAuth.getInstance().fetchProvidersForEmail(etYenimail.text.toString())
+            FirebaseAuth.getInstance().fetchProvidersForEmail(etYeniMail.text.toString())
                     .addOnCompleteListener { task ->
 
                         if (task.isSuccessful) {
@@ -140,7 +148,7 @@ class KullaniciAyarlariActivity : AppCompatActivity() {
                             if (task.getResult().providers?.size == 1) {
                                 Toast.makeText(this@KullaniciAyarlariActivity, "Email Kullanımda", Toast.LENGTH_SHORT).show()
                             } else {
-                                kullanici.updateEmail(etYenimail.text.toString())
+                                kullanici.updateEmail(etYeniMail.text.toString())
                                         .addOnCompleteListener { task ->
 
                                             Toast.makeText(this@KullaniciAyarlariActivity, "Mail adresi değişti! tekrar giriş yapın", Toast.LENGTH_SHORT).show()
@@ -168,4 +176,6 @@ class KullaniciAyarlariActivity : AppCompatActivity() {
         startActivity(intent)
         finish()
     }
+
+
 }
