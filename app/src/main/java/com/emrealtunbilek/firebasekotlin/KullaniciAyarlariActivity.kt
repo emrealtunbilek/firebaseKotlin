@@ -1,16 +1,19 @@
 package com.emrealtunbilek.firebasekotlin
 
 import android.content.Intent
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
+import android.util.Log
+import android.view.View
 import android.widget.Toast
+import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.UserProfileChangeRequest
-import android.view.View
-import com.google.firebase.auth.EmailAuthProvider
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import kotlinx.android.synthetic.main.activity_kullanici.*
-
 
 
 class KullaniciAyarlariActivity : AppCompatActivity() {
@@ -20,9 +23,9 @@ class KullaniciAyarlariActivity : AppCompatActivity() {
         setContentView(R.layout.activity_kullanici)
 
         var kullanici = FirebaseAuth.getInstance().currentUser!!
-        tvMailAdresi.text=kullanici?.email
 
 
+        kullaniciBilgileriniOku()
 
         tvSifremiUnuttum.setOnClickListener {
 
@@ -48,26 +51,25 @@ class KullaniciAyarlariActivity : AppCompatActivity() {
             if (etKullaniciAdi.text.toString().isNotEmpty()) {
 
 
-
-                    var bilgileriGuncelle = UserProfileChangeRequest.Builder()
-                            .setDisplayName(etKullaniciAdi.text.toString())
-                            .build()
-                    kullanici.updateProfile(bilgileriGuncelle)
-                            .addOnCompleteListener { task ->
-                                if (task.isSuccessful) {
-                                 FirebaseDatabase.getInstance().reference
-                                         .child("kullanici")
-                                         .child(FirebaseAuth.getInstance().currentUser?.uid)
-                                         .child("isim")
-                                         .setValue(etKullaniciAdi.text.toString())
-                                    Toast.makeText(this@KullaniciAyarlariActivity, "Değişiklikler Yapıldı", Toast.LENGTH_SHORT).show()
-                                }
+                var bilgileriGuncelle = UserProfileChangeRequest.Builder()
+                        .setDisplayName(etKullaniciAdi.text.toString())
+                        .build()
+                kullanici.updateProfile(bilgileriGuncelle)
+                        .addOnCompleteListener { task ->
+                            if (task.isSuccessful) {
+                                FirebaseDatabase.getInstance().reference
+                                        .child("kullanici")
+                                        .child(FirebaseAuth.getInstance().currentUser?.uid)
+                                        .child("isim")
+                                        .setValue(etKullaniciAdi.text.toString())
+                                Toast.makeText(this@KullaniciAyarlariActivity, "Değişiklikler Yapıldı", Toast.LENGTH_SHORT).show()
                             }
-            }else {
+                        }
+            } else {
                 Toast.makeText(this@KullaniciAyarlariActivity, "Kullanıcı adını doldurunuz", Toast.LENGTH_SHORT).show()
             }
 
-            if(etKullaniciTelefon.text.toString().isNotEmpty()) run {
+            if (etKullaniciTelefon.text.toString().isNotEmpty()) run {
 
                 FirebaseDatabase.getInstance().reference
                         .child("kullanici")
@@ -119,6 +121,57 @@ class KullaniciAyarlariActivity : AppCompatActivity() {
 
         }
     }
+
+    private fun kullaniciBilgileriniOku() {
+
+        var referans=FirebaseDatabase.getInstance().reference
+
+        var kullanici=FirebaseAuth.getInstance().currentUser
+        tvMailAdresi.text = kullanici?.email
+
+
+        //query 1
+        var sorgu=referans.child("kullanici")
+                .orderByKey()
+                .equalTo(kullanici?.uid)
+        sorgu.addListenerForSingleValueEvent(object : ValueEventListener{
+
+            override fun onCancelled(p0: DatabaseError?) {
+
+            }
+            override fun onDataChange(p0: DataSnapshot?) {
+                for (singleSnapshot in p0!!.children){
+                    var okunanKullanici = singleSnapshot.getValue(Kullanici::class.java)
+                    etKullaniciAdi.setText(okunanKullanici?.isim)
+                    etKullaniciTelefon.setText(okunanKullanici?.telefon)
+                    Log.e("FIREBASE","Adı:"+okunanKullanici?.isim+" Telefon:"+okunanKullanici?.telefon+" Uid:"+okunanKullanici?.kullanici_id+" Seviye:"+okunanKullanici?.seviye)
+                }
+            }
+
+        })
+
+        //query 2
+        var sorgu2=referans.child("kullanici")
+                .orderByChild("kullanici_id")
+                .equalTo(kullanici?.uid)
+        sorgu2.addListenerForSingleValueEvent(object : ValueEventListener{
+
+            override fun onCancelled(p0: DatabaseError?) {
+
+            }
+            override fun onDataChange(p0: DataSnapshot?) {
+                for (singleSnapshot in p0!!.children){
+                    var okunanKullanici = singleSnapshot.getValue(Kullanici::class.java)
+                  //  etKullaniciAdi.setText(okunanKullanici?.isim)
+                    //etKullaniciTelefon.setText(okunanKullanici?.telefon)
+                    Log.e("FIREBASE2","Adı:"+okunanKullanici?.isim+" Telefon:"+okunanKullanici?.telefon+" Uid:"+okunanKullanici?.kullanici_id+" Seviye:"+okunanKullanici?.seviye)
+                }
+            }
+
+        })
+
+    }
+
 
     private fun sifreBilgisiniGuncelle() {
 
