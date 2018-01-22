@@ -133,7 +133,8 @@ class KullaniciAyarlariActivity : AppCompatActivity() {
         //query 1
         var sorgu=referans.child("kullanici")
                 .orderByKey()
-                .equalTo(kullanici?.uid)
+               // .equalTo(kullanici?.uid)
+                .limitToLast(2)
         sorgu.addListenerForSingleValueEvent(object : ValueEventListener{
 
             override fun onCancelled(p0: DatabaseError?) {
@@ -169,6 +170,31 @@ class KullaniciAyarlariActivity : AppCompatActivity() {
             }
 
         })
+
+
+        //query 3
+        var sorgu3=referans.child("kullanici")
+                .child(kullanici?.uid)
+                .orderByValue()
+                //.equalTo(kullanici?.uid)
+        sorgu3.addListenerForSingleValueEvent(object : ValueEventListener{
+
+            override fun onCancelled(p0: DatabaseError?) {
+
+            }
+            override fun onDataChange(p0: DataSnapshot?) {
+                for (singleSnapshot in p0!!.children){
+                   // var okunanKullanici = singleSnapshot.getValue(Kullanici::class.java)
+                    //  etKullaniciAdi.setText(okunanKullanici?.isim)
+                    //etKullaniciTelefon.setText(okunanKullanici?.telefon)
+                    Log.e("FIREBASE3",singleSnapshot?.value.toString())
+                }
+            }
+
+        })
+
+
+
 
     }
 
