@@ -18,6 +18,8 @@ import kotlinx.android.synthetic.main.activity_kullanici.*
 
 class KullaniciAyarlariActivity : AppCompatActivity() {
 
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_kullanici)
@@ -80,6 +82,9 @@ class KullaniciAyarlariActivity : AppCompatActivity() {
 
             }
 
+
+
+
         }
 
         tvMailSifreGuncelle.setOnClickListener {
@@ -120,7 +125,15 @@ class KullaniciAyarlariActivity : AppCompatActivity() {
 
 
         }
+
+        imgProfilResmi.setOnClickListener {
+            var dialog=ProfilResmiFragment()
+            dialog.show(supportFragmentManager,"fotosec")
+        }
+
+
     }
+
 
     private fun kullaniciBilgileriniOku() {
 
