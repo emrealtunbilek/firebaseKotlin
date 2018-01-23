@@ -1,11 +1,18 @@
 package com.emrealtunbilek.firebasekotlin
 
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.net.Uri
+import android.os.AsyncTask
 import android.os.Bundle
+import android.support.v4.app.ActivityCompat
+import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import com.google.android.gms.tasks.OnSuccessListener
 import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.UserProfileChangeRequest
@@ -13,11 +20,25 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageMetadata
+import com.google.firebase.storage.UploadTask
 import kotlinx.android.synthetic.main.activity_kullanici.*
 
 
-class KullaniciAyarlariActivity : AppCompatActivity() {
 
+
+
+class KullaniciAyarlariActivity : AppCompatActivity(), ProfilResmiFragment.onProfilResimListener {
+
+    var izinlerVerildi = false
+
+    override fun getResimYolu(resimPath: Uri?) {
+
+    }
+
+    override fun getResimBitmap(bitmap: Bitmap) {
+    }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -83,8 +104,6 @@ class KullaniciAyarlariActivity : AppCompatActivity() {
             }
 
 
-
-
         }
 
         tvMailSifreGuncelle.setOnClickListener {
@@ -127,11 +146,49 @@ class KullaniciAyarlariActivity : AppCompatActivity() {
         }
 
         imgProfilResmi.setOnClickListener {
-            var dialog=ProfilResmiFragment()
-            dialog.show(supportFragmentManager,"fotosec")
+
+           if(izinlerVerildi){
+               var dialog=ProfilResmiFragment()
+               dialog.show(supportFragmentManager,"fotosec")
+           }else{
+               izinleriIste()
+           }
+
         }
 
 
+    }
+
+
+
+
+    private fun izinleriIste() {
+
+        var izinler= arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE,
+                android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                android.Manifest.permission.CAMERA)
+        if(ContextCompat.checkSelfPermission(this, izinler[0])==PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission(this, izinler[1])==PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission(this, izinler[2])==PackageManager.PERMISSION_GRANTED){
+
+            izinlerVerildi=true
+        }else {
+            ActivityCompat.requestPermissions(this, izinler, 150)
+        }
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        if(requestCode == 150){
+
+            if(grantResults[0]==PackageManager.PERMISSION_GRANTED && grantResults[1]==PackageManager.PERMISSION_GRANTED && grantResults[2]==PackageManager.PERMISSION_GRANTED){
+                var dialog=ProfilResmiFragment()
+                dialog.show(supportFragmentManager,"fotosec")
+            }else{
+                Toast.makeText(this@KullaniciAyarlariActivity,"Tüm izinleri vermelisiniz",Toast.LENGTH_SHORT).show()
+            }
+
+
+        }
     }
 
 
