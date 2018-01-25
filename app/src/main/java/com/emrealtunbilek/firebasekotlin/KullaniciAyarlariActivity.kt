@@ -23,6 +23,7 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageMetadata
 import com.google.firebase.storage.UploadTask
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_kullanici.*
 
 
@@ -32,12 +33,41 @@ import kotlinx.android.synthetic.main.activity_kullanici.*
 class KullaniciAyarlariActivity : AppCompatActivity(), ProfilResmiFragment.onProfilResimListener {
 
     var izinlerVerildi = false
+    var galeridenGelenURI:Uri? = null
+    var kameradanGelenBitmap:Bitmap? = null
 
     override fun getResimYolu(resimPath: Uri?) {
 
+        galeridenGelenURI=resimPath
+        Picasso.with(this).load(galeridenGelenURI).resize(100,100).into(imgProfilResmi)
     }
 
     override fun getResimBitmap(bitmap: Bitmap) {
+
+        kameradanGelenBitmap=bitmap
+        imgProfilResmi.setImageBitmap(bitmap)
+       // Picasso.with(this).load(bitmap)
+    }
+
+    inner class BackgroundResimCompress : AsyncTask<Uri, Void, ByteArray?>() {
+
+        override fun onPreExecute() {
+            super.onPreExecute()
+        }
+
+
+        override fun doInBackground(vararg params: Uri?): ByteArray? {
+
+        }
+
+        override fun onProgressUpdate(vararg values: Void?) {
+            super.onProgressUpdate(*values)
+        }
+
+        override fun onPostExecute(result: ByteArray?) {
+            super.onPostExecute(result)
+        }
+
     }
 
 
@@ -103,6 +133,8 @@ class KullaniciAyarlariActivity : AppCompatActivity(), ProfilResmiFragment.onPro
 
             }
 
+         
+
 
         }
 
@@ -158,9 +190,6 @@ class KullaniciAyarlariActivity : AppCompatActivity(), ProfilResmiFragment.onPro
 
 
     }
-
-
-
 
     private fun izinleriIste() {
 
