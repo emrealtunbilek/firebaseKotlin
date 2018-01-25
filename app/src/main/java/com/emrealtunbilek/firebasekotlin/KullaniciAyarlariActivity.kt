@@ -49,7 +49,7 @@ class KullaniciAyarlariActivity : AppCompatActivity(), ProfilResmiFragment.onPro
        // Picasso.with(this).load(bitmap)
     }
 
-    inner class BackgroundResimCompress : AsyncTask<Uri, Void, ByteArray?> {
+    inner class BackgroundResimCompress : AsyncTask<Uri, Double, ByteArray?> {
 
         var myBitmap:Bitmap? = null
 
@@ -79,12 +79,19 @@ class KullaniciAyarlariActivity : AppCompatActivity(), ProfilResmiFragment.onPro
 
             var resimBytes:ByteArray? = null
 
-            for (i in 1..5){
+            for (i in 1..10){
                 resimBytes=convertBitmaptoByte(myBitmap, 100/i)
+                publishProgress(resimBytes!!.size.toDouble())
             }
 
             return resimBytes
 
+        }
+
+
+        override fun onProgressUpdate(vararg values: Double?) {
+            super.onProgressUpdate(*values)
+            //Toast.makeText(this@KullaniciAyarlariActivity,"Suanki byte:"+values[0]!!/MEGABYTE+" MB",Toast.LENGTH_SHORT).show()
         }
 
         private fun convertBitmaptoByte(myBitmap: Bitmap?, i: Int): ByteArray? {
@@ -95,10 +102,6 @@ class KullaniciAyarlariActivity : AppCompatActivity(), ProfilResmiFragment.onPro
 
         }
 
-        override fun onProgressUpdate(vararg values: Void?) {
-            super.onProgressUpdate(*values)
-        }
-
         override fun onPostExecute(result: ByteArray?) {
             super.onPostExecute(result)
             uploadResimtoFirebase(result)
@@ -106,7 +109,29 @@ class KullaniciAyarlariActivity : AppCompatActivity(), ProfilResmiFragment.onPro
 
     }
 
-    private fun uploadResimtoFirebase(result: ByteArray?) {}
+    private fun uploadResimtoFirebase(result: ByteArray?) {
+
+        var storageReferans=FirebaseStorage.getInstance().getReference()
+        var resimEklenecekYer=storageReferans.child("images/users" + FirebaseAuth.getInstance().currentUser?.uid+"/profile_resim")
+
+        var uploadGorevi=resimEklenecekYer.putBytes(result!!)
+
+        uploadGorevi.addOnSuccessListener(object: OnSuccessListener<UploadTask.TaskSnapshot>{
+
+
+            override fun onSuccess(p0: UploadTask.TaskSnapshot?) {
+
+                var firebaseURL=p0?.downloadUrl
+                Toast.makeText(this@KullaniciAyarlariActivity,"Resmin yolu:"+firebaseURL.toString(),Toast.LENGTH_SHORT).show()
+            }
+
+
+        })
+
+
+
+
+    }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
