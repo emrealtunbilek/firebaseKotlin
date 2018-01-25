@@ -13,6 +13,7 @@ import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.OnSuccessListener
 import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.FirebaseAuth
@@ -27,6 +28,7 @@ import com.google.firebase.storage.UploadTask
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_kullanici.*
 import java.io.ByteArrayOutputStream
+import java.lang.Exception
 
 
 class KullaniciAyarlariActivity : AppCompatActivity(), ProfilResmiFragment.onProfilResimListener {
@@ -39,13 +41,13 @@ class KullaniciAyarlariActivity : AppCompatActivity(), ProfilResmiFragment.onPro
     override fun getResimYolu(resimPath: Uri?) {
 
         galeridenGelenURI=resimPath
-        Picasso.with(this).load(galeridenGelenURI).resize(100,100).into(imgProfilResmi)
+        Picasso.with(this).load(galeridenGelenURI).resize(100,100).into(imgCircleProfil)
     }
 
     override fun getResimBitmap(bitmap: Bitmap) {
 
         kameradanGelenBitmap=bitmap
-        imgProfilResmi.setImageBitmap(bitmap)
+        imgCircleProfil.setImageBitmap(bitmap)
        // Picasso.with(this).load(bitmap)
     }
 
@@ -111,6 +113,8 @@ class KullaniciAyarlariActivity : AppCompatActivity(), ProfilResmiFragment.onPro
 
     private fun uploadResimtoFirebase(result: ByteArray?) {
 
+        progressGoster()
+
         var storageReferans=FirebaseStorage.getInstance().getReference()
         var resimEklenecekYer=storageReferans.child("images/users" + FirebaseAuth.getInstance().currentUser?.uid+"/profile_resim")
 
@@ -122,9 +126,23 @@ class KullaniciAyarlariActivity : AppCompatActivity(), ProfilResmiFragment.onPro
             override fun onSuccess(p0: UploadTask.TaskSnapshot?) {
 
                 var firebaseURL=p0?.downloadUrl
-                Toast.makeText(this@KullaniciAyarlariActivity,"Resmin yolu:"+firebaseURL.toString(),Toast.LENGTH_SHORT).show()
+
+
+                FirebaseDatabase.getInstance().reference
+                        .child("kullanici")
+                        .child(FirebaseAuth.getInstance().currentUser?.uid)
+                        .child("profil_resmi")
+                        .setValue(firebaseURL.toString())
+
+                Toast.makeText(this@KullaniciAyarlariActivity, "Değişiklikler Yapıldı", Toast.LENGTH_SHORT).show()
+                progressGizle()
             }
 
+
+        }).addOnFailureListener(object:OnFailureListener{
+            override fun onFailure(p0: Exception) {
+                Toast.makeText(this@KullaniciAyarlariActivity,"Resim yüklenirken hata oluştu",Toast.LENGTH_SHORT).show()
+            }
 
         })
 
@@ -178,7 +196,7 @@ class KullaniciAyarlariActivity : AppCompatActivity(), ProfilResmiFragment.onPro
                                         .child(FirebaseAuth.getInstance().currentUser?.uid)
                                         .child("isim")
                                         .setValue(etKullaniciAdi.text.toString())
-                                Toast.makeText(this@KullaniciAyarlariActivity, "Değişiklikler Yapıldı", Toast.LENGTH_SHORT).show()
+
                             }
                         }
             } else {
@@ -246,7 +264,7 @@ class KullaniciAyarlariActivity : AppCompatActivity(), ProfilResmiFragment.onPro
 
         }
 
-        imgProfilResmi.setOnClickListener {
+        imgCircleProfil.setOnClickListener {
 
            if(izinlerVerildi){
                var dialog=ProfilResmiFragment()
@@ -314,8 +332,8 @@ class KullaniciAyarlariActivity : AppCompatActivity(), ProfilResmiFragment.onPro
         //query 1
         var sorgu=referans.child("kullanici")
                 .orderByKey()
-               // .equalTo(kullanici?.uid)
-                .limitToLast(2)
+                .equalTo(kullanici?.uid)
+                //.limitToLast(2)
         sorgu.addListenerForSingleValueEvent(object : ValueEventListener{
 
             override fun onCancelled(p0: DatabaseError?) {
@@ -326,6 +344,7 @@ class KullaniciAyarlariActivity : AppCompatActivity(), ProfilResmiFragment.onPro
                     var okunanKullanici = singleSnapshot.getValue(Kullanici::class.java)
                     etKullaniciAdi.setText(okunanKullanici?.isim)
                     etKullaniciTelefon.setText(okunanKullanici?.telefon)
+                    Picasso.with(this@KullaniciAyarlariActivity).load(okunanKullanici?.profil_resmi).resize(100,100).into(imgCircleProfil)
                     Log.e("FIREBASE","Adı:"+okunanKullanici?.isim+" Telefon:"+okunanKullanici?.telefon+" Uid:"+okunanKullanici?.kullanici_id+" Seviye:"+okunanKullanici?.seviye)
                 }
             }
@@ -435,6 +454,18 @@ class KullaniciAyarlariActivity : AppCompatActivity(), ProfilResmiFragment.onPro
         var intent = Intent(this@KullaniciAyarlariActivity, LoginActivity::class.java)
         startActivity(intent)
         finish()
+    }
+
+    fun progressGoster(){
+
+        progressPicture.visibility=View.VISIBLE
+
+    }
+
+    fun progressGizle(){
+
+        progressPicture.visibility=View.INVISIBLE
+
     }
 
 
