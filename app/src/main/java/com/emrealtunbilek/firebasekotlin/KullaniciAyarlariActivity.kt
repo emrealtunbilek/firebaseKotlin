@@ -6,6 +6,7 @@ import android.graphics.Bitmap
 import android.net.Uri
 import android.os.AsyncTask
 import android.os.Bundle
+import android.provider.MediaStore
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
@@ -25,9 +26,7 @@ import com.google.firebase.storage.StorageMetadata
 import com.google.firebase.storage.UploadTask
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_kullanici.*
-
-
-
+import java.io.ByteArrayOutputStream
 
 
 class KullaniciAyarlariActivity : AppCompatActivity(), ProfilResmiFragment.onProfilResimListener {
@@ -35,6 +34,7 @@ class KullaniciAyarlariActivity : AppCompatActivity(), ProfilResmiFragment.onPro
     var izinlerVerildi = false
     var galeridenGelenURI:Uri? = null
     var kameradanGelenBitmap:Bitmap? = null
+    val MEGABYTE=1000000.toDouble()
 
     override fun getResimYolu(resimPath: Uri?) {
 
@@ -49,7 +49,20 @@ class KullaniciAyarlariActivity : AppCompatActivity(), ProfilResmiFragment.onPro
        // Picasso.with(this).load(bitmap)
     }
 
-    inner class BackgroundResimCompress : AsyncTask<Uri, Void, ByteArray?>() {
+    inner class BackgroundResimCompress : AsyncTask<Uri, Void, ByteArray?> {
+
+        var myBitmap:Bitmap? = null
+
+        constructor(){}
+
+        constructor(bm:Bitmap){
+
+            if(bm != null){
+                myBitmap=bm
+            }
+
+
+        }
 
         override fun onPreExecute() {
             super.onPreExecute()
@@ -57,6 +70,28 @@ class KullaniciAyarlariActivity : AppCompatActivity(), ProfilResmiFragment.onPro
 
 
         override fun doInBackground(vararg params: Uri?): ByteArray? {
+
+            //galeriden resim seçilmiş
+            if(myBitmap == null){
+                myBitmap=MediaStore.Images.Media.getBitmap(this@KullaniciAyarlariActivity.contentResolver, params[0])
+                Log.e("TEST","Orjinal resmin boyutu:"+(myBitmap!!.byteCount).toDouble()/MEGABYTE)
+            }
+
+            var resimBytes:ByteArray? = null
+
+            for (i in 1..5){
+                resimBytes=convertBitmaptoByte(myBitmap, 100/i)
+            }
+
+            return resimBytes
+
+        }
+
+        private fun convertBitmaptoByte(myBitmap: Bitmap?, i: Int): ByteArray? {
+
+            var stream=ByteArrayOutputStream()
+            myBitmap?.compress(Bitmap.CompressFormat.JPEG, i, stream)
+            return stream.toByteArray()
 
         }
 
@@ -66,9 +101,12 @@ class KullaniciAyarlariActivity : AppCompatActivity(), ProfilResmiFragment.onPro
 
         override fun onPostExecute(result: ByteArray?) {
             super.onPostExecute(result)
+            uploadResimtoFirebase(result)
         }
 
     }
+
+    private fun uploadResimtoFirebase(result: ByteArray?) {}
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -133,7 +171,13 @@ class KullaniciAyarlariActivity : AppCompatActivity(), ProfilResmiFragment.onPro
 
             }
 
-         
+            if(galeridenGelenURI != null){
+
+                fotografCompressed(galeridenGelenURI!!)
+
+            }else if (kameradanGelenBitmap != null){
+                fotografCompressed(kameradanGelenBitmap!!)
+            }
 
 
         }
@@ -188,6 +232,19 @@ class KullaniciAyarlariActivity : AppCompatActivity(), ProfilResmiFragment.onPro
 
         }
 
+
+    }
+
+    private fun fotografCompressed(galeridenGelenURI: Uri) {
+        var compressed=BackgroundResimCompress()
+        compressed.execute(galeridenGelenURI)
+    }
+
+    private fun fotografCompressed(kameradanGelenBitmap: Bitmap) {
+
+        var compressed=BackgroundResimCompress(kameradanGelenBitmap)
+        var uri:Uri?=null
+        compressed.execute(uri)
 
     }
 
