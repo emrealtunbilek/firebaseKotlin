@@ -67,7 +67,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginTop="8dp"
-        android:text="Button"
+        android:text="OLUSTUR"
         app:layout_constraintEnd_toEndOf="@+id/seekBarSeviye"
         app:layout_constraintTop_toBottomOf="@+id/tvYeniSohbetSeviye" />
 </android.support.constraint.ConstraintLayout>
