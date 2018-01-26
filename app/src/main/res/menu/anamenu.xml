@@ -3,4 +3,5 @@
 
     <item android:id="@+id/menuHesapAyalari" android:title="Hesap Ayarları"></item>
     <item android:id="@+id/menuCikisyap" android:title="Çıkış yap"></item>
+    <item android:id="@+id/menuSohbet" android:title="Sohbet Odası"></item>
 </menu>

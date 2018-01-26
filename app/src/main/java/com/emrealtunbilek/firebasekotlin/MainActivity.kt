@@ -70,6 +70,13 @@ class MainActivity : AppCompatActivity() {
                 return true
             }
 
+            R.id.menuSohbet -> {
+
+                var intent=Intent(this,SohbetActivity::class.java)
+                startActivity(intent)
+                return true
+            }
+
         }
 
 
