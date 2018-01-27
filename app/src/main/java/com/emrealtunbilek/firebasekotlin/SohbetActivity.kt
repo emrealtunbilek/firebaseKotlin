@@ -110,10 +110,25 @@ class SohbetActivity : AppCompatActivity() {
 
     private fun sohbetOdalariListele() {
 
-        var adapter=SohbetOdasiRecyclerViewAdapter(tumSohbetOdalari)
+        var adapter=SohbetOdasiRecyclerViewAdapter(this@SohbetActivity, tumSohbetOdalari)
         rvSohbetOdalari.adapter=adapter
 
         rvSohbetOdalari.layoutManager=LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false)
+
+
+    }
+
+    fun sohbetOdasiSil(silinecekSohbetOdasiID:String){
+
+
+        var ref=FirebaseDatabase.getInstance().reference
+        ref.child("sohbet_odasi")
+                .child(silinecekSohbetOdasiID)
+                .removeValue()
+
+        Toast.makeText(this,"Sohbet Odası Silindi",Toast.LENGTH_SHORT).show()
+        init()
+
 
 
     }
