@@ -2,6 +2,7 @@ package com.emrealtunbilek.firebasekotlin
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import com.emrealtunbilek.firebasekotlin.dialogs.YeniSohbetOdasiFDialogFragment
 import kotlinx.android.synthetic.main.activity_sohbet.*
 
 class SohbetActivity : AppCompatActivity() {
@@ -13,7 +14,7 @@ class SohbetActivity : AppCompatActivity() {
 
         fabYeniSohbetOdasi.setOnClickListener {
 
-            var dialog=YeniSohbetOdasiFDialogFragment()
+            var dialog= YeniSohbetOdasiFDialogFragment()
             dialog.show(supportFragmentManager,"gosteryenisohbetodasi")
 
         }

@@ -1,18 +1,23 @@
-package com.emrealtunbilek.firebasekotlin
+package com.emrealtunbilek.firebasekotlin.dialogs
 
 
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import com.emrealtunbilek.firebasekotlin.R
+import com.emrealtunbilek.firebasekotlin.model.Kullanici
+import com.emrealtunbilek.firebasekotlin.model.SohbetMesaj
+import com.emrealtunbilek.firebasekotlin.model.SohbetOdasi
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 class YeniSohbetOdasiFDialogFragment : DialogFragment() {
@@ -67,13 +72,29 @@ class YeniSohbetOdasiFDialogFragment : DialogFragment() {
 
                     var sohbetOdasiID=ref.child("sohbet_odasi").push().key
 
-                    var yeniSohbetOdasi=SohbetOdasi()
+                    var yeniSohbetOdasi= SohbetOdasi()
                     yeniSohbetOdasi.olusturan_id=FirebaseAuth.getInstance().currentUser?.uid
                     yeniSohbetOdasi.seviye=mSeekProgress.toString()
                     yeniSohbetOdasi.sohbetodasi_adi=etSohbetOdasiAdi.text.toString()
                     yeniSohbetOdasi.sohbetodasi_id=sohbetOdasiID
 
                     ref.child("sohbet_odasi").child(sohbetOdasiID).setValue(yeniSohbetOdasi)
+
+
+                    var mesajID=ref.child("sohbet_odasi").push().key
+
+                    var karsilamaMesaji=SohbetMesaj()
+                    karsilamaMesaji.mesaj="Sohbet odasına hoşgeldiniz"
+                    karsilamaMesaji.timestamp=getMesajTarihi()
+
+                    ref.child("sohbet_odasi")
+                            .child(sohbetOdasiID)
+                            .child("sohbet_odasi_mesajlari")
+                            .child(mesajID)
+                            .setValue(karsilamaMesaji)
+
+
+                    Toast.makeText(activity,"Sohbet Odası Olusturuldu",Toast.LENGTH_SHORT).show()
 
 
                 }else {
@@ -118,6 +139,15 @@ class YeniSohbetOdasiFDialogFragment : DialogFragment() {
 
             }
         })
+
+    }
+
+
+    private fun getMesajTarihi() : String{
+
+        var sdf=SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale("tr"))
+        return sdf.format(Date())
+
 
     }
 

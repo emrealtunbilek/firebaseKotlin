@@ -5,6 +5,8 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import com.emrealtunbilek.firebasekotlin.dialogs.OnayMailTekrarGonderFragment
+import com.emrealtunbilek.firebasekotlin.dialogs.SifremiUnuttumDialogFragment
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
@@ -28,12 +30,12 @@ class LoginActivity : AppCompatActivity() {
         }
 
         tvOnaymailiniTekrarGonder.setOnClickListener {
-            var dialogGoster=OnayMailTekrarGonderFragment()
+            var dialogGoster= OnayMailTekrarGonderFragment()
             dialogGoster.show(supportFragmentManager,"gosterdialog")
         }
 
         tvSifreTekrarYolla.setOnClickListener {
-            var dialogSifreyiTekrarGonder=SifremiUnuttumDialogFragment()
+            var dialogSifreyiTekrarGonder= SifremiUnuttumDialogFragment()
             dialogSifreyiTekrarGonder.show(supportFragmentManager,"gosterdialogsifre")
         }
 

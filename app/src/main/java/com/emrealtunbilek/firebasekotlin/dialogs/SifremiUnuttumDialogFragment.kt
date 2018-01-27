@@ -1,4 +1,4 @@
-package com.emrealtunbilek.firebasekotlin
+package com.emrealtunbilek.firebasekotlin.dialogs
 
 
 import android.os.Bundle
@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import com.emrealtunbilek.firebasekotlin.R
 import com.google.firebase.auth.FirebaseAuth
 
 

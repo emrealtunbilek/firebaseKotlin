@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import com.emrealtunbilek.firebasekotlin.model.Kullanici
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
@@ -41,7 +42,7 @@ class RegisterActivity : Activity() {
                             progressBarGizle()
                             onayMailiGonder()
 
-                            var veritabaninaEklenecekKullanici=Kullanici()
+                            var veritabaninaEklenecekKullanici= Kullanici()
                             veritabaninaEklenecekKullanici.isim=etMail.text.toString().substring(0,etMail.text.toString().indexOf("@"))
                             veritabaninaEklenecekKullanici.kullanici_id=FirebaseAuth.getInstance().currentUser?.uid
                             veritabaninaEklenecekKullanici.profil_resmi=""

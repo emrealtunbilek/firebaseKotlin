@@ -1,4 +1,4 @@
-package com.emrealtunbilek.firebasekotlin
+package com.emrealtunbilek.firebasekotlin.model
 
 
 class Kullanici {

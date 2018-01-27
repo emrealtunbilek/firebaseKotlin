@@ -13,6 +13,8 @@ import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import com.emrealtunbilek.firebasekotlin.dialogs.ProfilResmiFragment
+import com.emrealtunbilek.firebasekotlin.model.Kullanici
 import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.OnSuccessListener
 import com.google.firebase.auth.EmailAuthProvider
@@ -23,7 +25,6 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.StorageMetadata
 import com.google.firebase.storage.UploadTask
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_kullanici.*
@@ -267,7 +268,7 @@ class KullaniciAyarlariActivity : AppCompatActivity(), ProfilResmiFragment.onPro
         imgCircleProfil.setOnClickListener {
 
            if(izinlerVerildi){
-               var dialog=ProfilResmiFragment()
+               var dialog= ProfilResmiFragment()
                dialog.show(supportFragmentManager,"fotosec")
            }else{
                izinleriIste()
@@ -310,7 +311,7 @@ class KullaniciAyarlariActivity : AppCompatActivity(), ProfilResmiFragment.onPro
         if(requestCode == 150){
 
             if(grantResults[0]==PackageManager.PERMISSION_GRANTED && grantResults[1]==PackageManager.PERMISSION_GRANTED && grantResults[2]==PackageManager.PERMISSION_GRANTED){
-                var dialog=ProfilResmiFragment()
+                var dialog= ProfilResmiFragment()
                 dialog.show(supportFragmentManager,"fotosec")
             }else{
                 Toast.makeText(this@KullaniciAyarlariActivity,"Tüm izinleri vermelisiniz",Toast.LENGTH_SHORT).show()
