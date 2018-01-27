@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import com.emrealtunbilek.firebasekotlin.R
+import com.emrealtunbilek.firebasekotlin.SohbetActivity
 import com.emrealtunbilek.firebasekotlin.model.Kullanici
 import com.emrealtunbilek.firebasekotlin.model.SohbetMesaj
 import com.emrealtunbilek.firebasekotlin.model.SohbetOdasi
@@ -95,6 +96,9 @@ class YeniSohbetOdasiFDialogFragment : DialogFragment() {
 
 
                     Toast.makeText(activity,"Sohbet Odası Olusturuldu",Toast.LENGTH_SHORT).show()
+                    (activity as SohbetActivity).init()
+                    dialog.dismiss()
+
 
 
                 }else {
