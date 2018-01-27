@@ -2,8 +2,10 @@ package com.emrealtunbilek.firebasekotlin
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import android.widget.Toast
+import com.emrealtunbilek.firebasekotlin.adapters.SohbetOdasiRecyclerViewAdapter
 import com.emrealtunbilek.firebasekotlin.dialogs.YeniSohbetOdasiFDialogFragment
 import com.emrealtunbilek.firebasekotlin.model.SohbetMesaj
 import com.emrealtunbilek.firebasekotlin.model.SohbetOdasi
@@ -68,7 +70,7 @@ class SohbetActivity : AppCompatActivity() {
 
 
                     var tumMesajlar=ArrayList<SohbetMesaj>()
-                    for (mesajlar in tekSohbetOdasi.child("sohbet_odasi_mesajları").children){
+                    for (mesajlar in tekSohbetOdasi.child("sohbet_odasi_mesajlari").children){
 
                         var okunanMesaj=SohbetMesaj()
                         okunanMesaj.timestamp=mesajlar.getValue(SohbetMesaj::class.java)?.timestamp
@@ -96,11 +98,22 @@ class SohbetActivity : AppCompatActivity() {
                 Toast.makeText(this@SohbetActivity,"Tüm Sohbet odası sayısı : "+tumSohbetOdalari.size,Toast.LENGTH_SHORT).show()
 
 
+                sohbetOdalariListele()
 
             }
 
 
         })
+
+
+    }
+
+    private fun sohbetOdalariListele() {
+
+        var adapter=SohbetOdasiRecyclerViewAdapter(tumSohbetOdalari)
+        rvSohbetOdalari.adapter=adapter
+
+        rvSohbetOdalari.layoutManager=LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false)
 
 
     }
