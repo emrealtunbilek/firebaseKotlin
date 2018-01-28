@@ -3,6 +3,7 @@ package com.emrealtunbilek.firebasekotlin.adapters
 
 import android.content.Context
 import android.content.DialogInterface
+import android.content.Intent
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.RecyclerView
@@ -13,6 +14,7 @@ import android.widget.RelativeLayout
 import android.widget.Toast
 import com.emrealtunbilek.firebasekotlin.R
 import com.emrealtunbilek.firebasekotlin.SohbetActivity
+import com.emrealtunbilek.firebasekotlin.SohbetOdasiActivity
 import com.emrealtunbilek.firebasekotlin.model.Kullanici
 import com.emrealtunbilek.firebasekotlin.model.SohbetOdasi
 import com.google.firebase.auth.FirebaseAuth
@@ -99,6 +101,15 @@ class SohbetOdasiRecyclerViewAdapter(mActivity:AppCompatActivity, tumSohbetOdala
 
             }
 
+            tekSatirSohbetOdasi.setOnClickListener {
+
+                var intent=Intent(myActivity,SohbetOdasiActivity::class.java)
+                intent.putExtra("sohbet_odasi_id",oAnOlusturulanSohbetOdasi.sohbetodasi_id)
+                myActivity.startActivity(intent)
+
+
+            }
+
             sohbetOdasiMesajSayisi.text=(oAnOlusturulanSohbetOdasi.sohbet_odasi_mesajlari)?.size.toString()
 
             var ref=FirebaseDatabase.getInstance().reference
@@ -112,7 +123,7 @@ class SohbetOdasiRecyclerViewAdapter(mActivity:AppCompatActivity, tumSohbetOdala
                 override fun onDataChange(p0: DataSnapshot?) {
                   for(kullanici in p0!!.children){
                       var profilResmiPath=kullanici.getValue(Kullanici::class.java)?.profil_resmi.toString()
-                      Picasso.with(itemView.context).load(profilResmiPath).into(sohbetOdasiResim)
+                      Picasso.with(itemView.context).load(profilResmiPath).resize(40,40).into(sohbetOdasiResim)
                       sohbetOdasiOlusturan.text=kullanici.getValue(Kullanici::class.java)?.isim.toString()
                   }
                 }

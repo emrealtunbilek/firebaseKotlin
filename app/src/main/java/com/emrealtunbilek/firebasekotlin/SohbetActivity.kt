@@ -1,9 +1,11 @@
 package com.emrealtunbilek.firebasekotlin
 
+import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
+import android.view.View
 import android.widget.Toast
 import com.emrealtunbilek.firebasekotlin.adapters.SohbetOdasiRecyclerViewAdapter
 import com.emrealtunbilek.firebasekotlin.dialogs.YeniSohbetOdasiFDialogFragment
@@ -112,8 +114,8 @@ class SohbetActivity : AppCompatActivity() {
 
         var adapter=SohbetOdasiRecyclerViewAdapter(this@SohbetActivity, tumSohbetOdalari)
         rvSohbetOdalari.adapter=adapter
-
         rvSohbetOdalari.layoutManager=LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false)
+
 
 
     }
