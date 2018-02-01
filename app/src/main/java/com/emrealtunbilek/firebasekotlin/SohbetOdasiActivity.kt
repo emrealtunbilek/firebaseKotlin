@@ -14,10 +14,8 @@ class SohbetOdasiActivity : AppCompatActivity() {
     var mAuthListener:FirebaseAuth.AuthStateListener? = null
     var mMesajReferans : DatabaseReference?=null
 
-    
-
-
     var secilenSohbetOdasiId:String = ""
+    var tumMesajlar:ArrayList<SohbetMesaj>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,6 +24,7 @@ class SohbetOdasiActivity : AppCompatActivity() {
         //kullanıcının giriş çıkış işlemleri dinler
         baslatFirebaseAuthListener()
 
+        //sohbet activityden gelen seçilen sohbet odasının id bilgisini alır ve valueEventlistener kaydı yapar
         sohbetOdasiniOgren()
 
 
@@ -41,6 +40,7 @@ class SohbetOdasiActivity : AppCompatActivity() {
 
         }
 
+        //cagrıldı an tüm mesajları getirir, sonrasında ise bir ekleme veya cıkarma durumunda tetiklenir
         override fun onDataChange(p0: DataSnapshot?) {
             sohbetOdasindakiMesajlariGetir()
         }
@@ -49,6 +49,58 @@ class SohbetOdasiActivity : AppCompatActivity() {
     }
 
     private fun sohbetOdasindakiMesajlariGetir() {
+
+        if(tumMesajlar==null){
+            tumMesajlar=ArrayList<SohbetMesaj>()
+        }
+
+        mMesajReferans=FirebaseDatabase.getInstance().getReference()
+
+        var sorgu=mMesajReferans?.child("sohbet_odasi")?.child(secilenSohbetOdasiId)?.child("sohbet_odasi_mesajlari")!!
+                .addListenerForSingleValueEvent(object : ValueEventListener{
+                    override fun onCancelled(p0: DatabaseError?) {
+
+                    }
+
+                    override fun onDataChange(p0: DataSnapshot?) {
+
+                        for(tekMesaj in p0!!.children){
+
+                            var geciciMesaj=SohbetMesaj()
+                            var kullaniciID=tekMesaj.getValue(SohbetMesaj::class.java)!!.kullanici_id
+
+                            if(kullaniciID != null){
+                                geciciMesaj.mesaj=tekMesaj.getValue(SohbetMesaj::class.java)!!.mesaj
+                                geciciMesaj.kullanici_id=tekMesaj.getValue(SohbetMesaj::class.java)!!.kullanici_id
+                                geciciMesaj.timestamp=tekMesaj.getValue(SohbetMesaj::class.java)!!.timestamp
+                                geciciMesaj.profil_resmi=""
+                                geciciMesaj.adi=""
+
+                                tumMesajlar?.add(geciciMesaj)
+
+                            }else {
+                                geciciMesaj.mesaj=tekMesaj.getValue(SohbetMesaj::class.java)!!.mesaj
+                                geciciMesaj.timestamp=tekMesaj.getValue(SohbetMesaj::class.java)!!.timestamp
+                                geciciMesaj.profil_resmi=""
+                                geciciMesaj.adi=""
+                                tumMesajlar?.add(geciciMesaj)
+                            }
+
+
+
+
+                        }
+
+
+                    }
+
+                })
+
+
+       
+
+
+
     }
 
 
