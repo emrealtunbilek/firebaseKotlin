@@ -45,6 +45,8 @@ class SohbetOdasiRecyclerViewAdapter(mActivity:AppCompatActivity, tumSohbetOdala
         return sohbetOdalari.size
     }
 
+
+
     override fun onBindViewHolder(holder: SohbetOdasiHolder?, position: Int) {
 
         var oAnOlusturulanSohbetOdasi = sohbetOdalari.get(position)

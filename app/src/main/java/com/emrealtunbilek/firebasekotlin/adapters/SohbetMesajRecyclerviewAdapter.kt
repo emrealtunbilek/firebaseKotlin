@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.emrealtunbilek.firebasekotlin.R
 import com.emrealtunbilek.firebasekotlin.model.SohbetMesaj
+import com.google.firebase.auth.FirebaseAuth
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.tek_satir_mesaj_layout.view.*
 
@@ -21,7 +22,15 @@ class SohbetMesajRecyclerviewAdapter(context: Context, tumMesajlar:ArrayList<Soh
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): SohbetMesajViewHolder {
 
         var inflater=LayoutInflater.from(myContext)
-        var view=inflater.inflate(R.layout.tek_satir_sohbet_odasi , parent , false)
+
+        var view:View? = null
+        if(viewType==2)
+        {
+            view=inflater.inflate(R.layout.tek_satir_mesaj_layout , parent , false)
+        }else {
+            view=inflater.inflate(R.layout.tek_satir_mesaj_layout2 , parent , false)
+        }
+
 
         return SohbetMesajViewHolder(view)
     }
@@ -32,6 +41,14 @@ class SohbetMesajRecyclerviewAdapter(context: Context, tumMesajlar:ArrayList<Soh
         var oanKiMesaj = myTumMesajlar.get(position)
         holder?.setData(oanKiMesaj, position)
 
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        if(myTumMesajlar.get(position).kullanici_id.equals(FirebaseAuth.getInstance().currentUser?.uid)){
+            return 1
+        }else {
+            return 2
+        }
     }
 
     override fun getItemCount(): Int {
