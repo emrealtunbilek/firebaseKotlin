@@ -60,7 +60,7 @@ class SohbetMesajRecyclerviewAdapter(context: Context, tumMesajlar:ArrayList<Soh
             }
 
 
-            
+
         }
 
 
