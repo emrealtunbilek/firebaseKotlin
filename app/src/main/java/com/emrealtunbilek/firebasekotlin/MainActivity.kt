@@ -6,6 +6,8 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.iid.FirebaseInstanceId
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -18,6 +20,8 @@ class MainActivity : AppCompatActivity() {
         initAuthStateListener()
 
     }
+
+
 
     private fun setKullaniciBilgileri() {
         var kullanici=FirebaseAuth.getInstance().currentUser
@@ -50,10 +54,13 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+
+
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.anamenu, menu)
         return true
     }
+
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
 
