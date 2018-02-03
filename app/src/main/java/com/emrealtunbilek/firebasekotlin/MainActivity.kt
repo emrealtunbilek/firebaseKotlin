@@ -18,9 +18,23 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         initAuthStateListener()
+        initFCM()
 
     }
 
+    private fun initFCM() {
+        var token=FirebaseInstanceId.getInstance().token
+        tokenVeriTabaninaKaydet(token)
+    }
+
+    private fun tokenVeriTabaninaKaydet(refreshedToken: String?) {
+
+        var ref=FirebaseDatabase.getInstance().reference
+                .child("kullanici")
+                .child(FirebaseAuth.getInstance().currentUser?.uid)
+                .child("mesaj_token")
+                .setValue(refreshedToken)
+    }
 
 
     private fun setKullaniciBilgileri() {
