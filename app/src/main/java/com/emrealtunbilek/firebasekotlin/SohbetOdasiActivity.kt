@@ -28,6 +28,7 @@ class SohbetOdasiActivity : AppCompatActivity() {
     //Firebase
     var mAuthListener: FirebaseAuth.AuthStateListener? = null
     var mMesajReferans: DatabaseReference? = null
+    var SERVER_KEY:String? = null
 
     var secilenSohbetOdasiId: String = ""
     var tumMesajlar: ArrayList<SohbetMesaj>? = null
@@ -43,10 +44,29 @@ class SohbetOdasiActivity : AppCompatActivity() {
 
         //sohbet activityden gelen seçilen sohbet odasının id bilgisini alır ve valueEventlistener kaydı yapar
         sohbetOdasiniOgren()
-
+        serverkeyOku()
         init()
 
 
+    }
+
+    private fun serverkeyOku() {
+       var ref=FirebaseDatabase.getInstance().reference
+               .child("server")
+               .orderByValue()
+        ref.addListenerForSingleValueEvent(object: ValueEventListener{
+            override fun onCancelled(p0: DatabaseError?) {
+
+            }
+
+            override fun onDataChange(p0: DataSnapshot?) {
+                var singleSnapShot=p0?.children?.iterator()?.next()
+                SERVER_KEY=singleSnapShot?.getValue().toString()
+                Log.e("SERVERKEY","OKUNAN SERVERKEY="+SERVER_KEY)
+            }
+
+
+        })
     }
 
     private fun init() {
