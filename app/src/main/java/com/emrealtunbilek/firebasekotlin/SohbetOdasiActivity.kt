@@ -33,13 +33,14 @@ class SohbetOdasiActivity : AppCompatActivity() {
     //Firebase
     var mAuthListener: FirebaseAuth.AuthStateListener? = null
     var mMesajReferans: DatabaseReference? = null
-    var SERVER_KEY:String? = null
-    var BASE_URL="https://fcm.googleapis.com/fcm/"
+    var SERVER_KEY: String? = null
+    var BASE_URL = "https://fcm.googleapis.com/fcm/"
 
     var secilenSohbetOdasiId: String = ""
     var tumMesajlar: ArrayList<SohbetMesaj>? = null
     var mesajIDSet: HashSet<String>? = null
     var myAdapter: SohbetMesajRecyclerviewAdapter? = null
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,18 +58,18 @@ class SohbetOdasiActivity : AppCompatActivity() {
     }
 
     private fun serverkeyOku() {
-       var ref=FirebaseDatabase.getInstance().reference
-               .child("server")
-               .orderByValue()
-        ref.addListenerForSingleValueEvent(object: ValueEventListener{
+        var ref = FirebaseDatabase.getInstance().reference
+                .child("server")
+                .orderByValue()
+        ref.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onCancelled(p0: DatabaseError?) {
 
             }
 
             override fun onDataChange(p0: DataSnapshot?) {
-                var singleSnapShot=p0?.children?.iterator()?.next()
-                SERVER_KEY=singleSnapShot?.getValue().toString()
-                Log.e("SERVERKEY","OKUNAN SERVERKEY="+SERVER_KEY)
+                var singleSnapShot = p0?.children?.iterator()?.next()
+                SERVER_KEY = singleSnapShot?.getValue().toString()
+                Log.e("SERVERKEY", "OKUNAN SERVERKEY=" + SERVER_KEY)
             }
 
 
@@ -106,38 +107,90 @@ class SohbetOdasiActivity : AppCompatActivity() {
                         .setValue(kaydedilecekMesaj)
 
 
-
-                var retrofit=Retrofit.Builder()
+                var retrofit = Retrofit.Builder()
                         .baseUrl(BASE_URL)
                         .addConverterFactory(GsonConverterFactory.create())
                         .build()
 
-                var myInterface=retrofit.create(FCMInterface::class.java)
+                var myInterface = retrofit.create(FCMInterface::class.java)
 
-                var headers=HashMap<String, String>()
+                var headers = HashMap<String, String>()
                 headers.put("Content-Type", "application/json")
-                headers.put("Authorization", "key="+SERVER_KEY)
+                headers.put("Authorization", "key=" + SERVER_KEY)
 
-                var data=FCMModel.Data("Yeni Mesaj Var", etYeniMesaj.text.toString(),"sohbet")
-                var to="fEexSsxyOVg:APA91bGs-znlHVB6roo5FlrIjoS49sBmtGFz2va4jTR9hdve6T0Kl6lkxV8WjLnZGx2JKeBU3_GT4aAN8sGwaZWciSf2KrxU8rTj9EVahhAgS8wRxN28G8AvKejk3Z1GW2EKk1dcaWcx"
+                var ref = FirebaseDatabase.getInstance().reference
+                        .child("sohbet_odasi")
+                        .child(secilenSohbetOdasiId)
+                        .child("sohbet_odasindaki_kullanicilar")
+                        .orderByKey()
+                        .addListenerForSingleValueEvent(object : ValueEventListener {
+                            override fun onCancelled(p0: DatabaseError?) {
 
-                var bildirim:FCMModel= FCMModel(to,data)
+                            }
+
+                            override fun onDataChange(p0: DataSnapshot?) {
+
+                                for (kullaniciID in p0?.children!!) {
+
+                                    var id = kullaniciID?.key
+
+                                    if (!id.equals(FirebaseAuth.getInstance().currentUser?.uid)) {
 
 
-                var istek=myInterface.bildirimGonder(headers,bildirim)
-                istek.enqueue(object : Callback<Response<FCMModel>>{
-                    override fun onResponse(call: Call<Response<FCMModel>>?, response: Response<Response<FCMModel>>?) {
-                        Log.e("RETROFIT", "BASARILI : "+response?.raw()+  " MESAJ:"+call?.request())
-                    }
+                                        var ref = FirebaseDatabase.getInstance().reference
+                                                .child("kullanici")
+                                                .orderByKey()
+                                                .equalTo(id)
+                                                .addListenerForSingleValueEvent(object : ValueEventListener {
+                                                    override fun onCancelled(p0: DatabaseError?) {
 
-                    override fun onFailure(call: Call<Response<FCMModel>>?, t: Throwable?) {
-                        Log.e("RETROFIT", "HATA : "+t?.message)
-                    }
+                                                    }
 
-                })
-                etYeniMesaj.setText("")
+                                                    override fun onDataChange(p0: DataSnapshot?) {
 
-        }
+                                                        var tekKullanici=p0?.children?.iterator()?.next()
+                                                        var kullaniciMesajToken=tekKullanici?.getValue(Kullanici::class.java)?.mesaj_token
+
+                                                        var data = FCMModel.Data("Yeni Mesaj", etYeniMesaj.text.toString(),"sohbet", secilenSohbetOdasiId)
+                                                        var to = kullaniciMesajToken
+
+                                                        var bildirim: FCMModel = FCMModel(to!!, data)
+
+
+                                                        var istek = myInterface.bildirimGonder(headers, bildirim)
+                                                        istek.enqueue(object : Callback<Response<FCMModel>> {
+                                                            override fun onResponse(call: Call<Response<FCMModel>>?, response: Response<Response<FCMModel>>?) {
+                                                                Log.e("RETROFIT", "BASARILI : " + response?.raw() + " MESAJ:" + call?.request())
+                                                            }
+
+                                                            override fun onFailure(call: Call<Response<FCMModel>>?, t: Throwable?) {
+                                                                Log.e("RETROFIT", "HATA : " + t?.message)
+                                                            }
+
+                                                        })
+                                                        etYeniMesaj.setText("")
+
+
+                                                    }
+
+
+                                                })
+
+
+                                    }
+
+
+                                }
+
+                            }
+
+
+                        })
+
+
+
+
+            }
 
         }
     }
@@ -163,6 +216,7 @@ class SohbetOdasiActivity : AppCompatActivity() {
         //cagrıldı an tüm mesajları getirir, sonrasında ise bir ekleme veya cıkarma durumunda tetiklenir
         override fun onDataChange(p0: DataSnapshot?) {
             sohbetOdasindakiMesajlariGetir()
+
         }
 
 
@@ -285,17 +339,7 @@ class SohbetOdasiActivity : AppCompatActivity() {
         }
     }
 
-    private fun updateNumMessages(numMessages: Int) {
-        val reference = FirebaseDatabase.getInstance().reference
 
-        reference
-                .child("sohbet_odasi")
-                .child(secilenSohbetOdasiId)
-                .child("odadaki_kullanicilar")
-                .child(FirebaseAuth.getInstance().currentUser!!.uid)
-                .child("son_gorunen_mesaj_sayisi")
-                .setValue(numMessages.toString())
-    }
 
     override fun onStart() {
         super.onStart()
