@@ -18,9 +18,14 @@ import kotlin.collections.HashSet
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.DatabaseReference
 import android.widget.Toast
-
-
-
+import com.emrealtunbilek.firebasekotlin.model.FCMModel
+import okhttp3.ResponseBody
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+import java.io.IOException
 
 
 class SohbetOdasiActivity : AppCompatActivity() {
@@ -29,6 +34,7 @@ class SohbetOdasiActivity : AppCompatActivity() {
     var mAuthListener: FirebaseAuth.AuthStateListener? = null
     var mMesajReferans: DatabaseReference? = null
     var SERVER_KEY:String? = null
+    var BASE_URL="https://fcm.googleapis.com/fcm/"
 
     var secilenSohbetOdasiId: String = ""
     var tumMesajlar: ArrayList<SohbetMesaj>? = null
@@ -99,13 +105,37 @@ class SohbetOdasiActivity : AppCompatActivity() {
                 referans.child(yeniMesajID)
                         .setValue(kaydedilecekMesaj)
 
+
+
+                var retrofit=Retrofit.Builder()
+                        .baseUrl(BASE_URL)
+                        .addConverterFactory(GsonConverterFactory.create())
+                        .build()
+
+                var myInterface=retrofit.create(FCMInterface::class.java)
+
+                var headers=HashMap<String, String>()
+                headers.put("Content-Type", "application/json")
+                headers.put("Authorization", "key="+SERVER_KEY)
+
+                var data=FCMModel.Data("Yeni Mesaj Var", etYeniMesaj.text.toString(),"sohbet")
+                var to="fEexSsxyOVg:APA91bGs-znlHVB6roo5FlrIjoS49sBmtGFz2va4jTR9hdve6T0Kl6lkxV8WjLnZGx2JKeBU3_GT4aAN8sGwaZWciSf2KrxU8rTj9EVahhAgS8wRxN28G8AvKejk3Z1GW2EKk1dcaWcx"
+
+                var bildirim:FCMModel= FCMModel(to,data)
+
+
+                var istek=myInterface.bildirimGonder(headers,bildirim)
+                istek.enqueue(object : Callback<Response<FCMModel>>{
+                    override fun onResponse(call: Call<Response<FCMModel>>?, response: Response<Response<FCMModel>>?) {
+                        Log.e("RETROFIT", "BASARILI : "+response?.raw()+  " MESAJ:"+call?.request())
+                    }
+
+                    override fun onFailure(call: Call<Response<FCMModel>>?, t: Throwable?) {
+                        Log.e("RETROFIT", "HATA : "+t?.message)
+                    }
+
+                })
                 etYeniMesaj.setText("")
-
-
-
-
-
-
 
         }
 

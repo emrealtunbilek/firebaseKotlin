@@ -16,7 +16,12 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         var bildirimBody=p0?.notification?.body
         var data=p0?.data
 
-        Log.e("FCM", "Başlık : "+bildirimBaslik+ "Body : $bildirimBody" + " Data: $data")
+
+        var baslik=p0?.data?.get("baslik")
+        var icerik=p0?.data?.get("icerik")
+        var bildirim_turu=p0?.data?.get("bildirim_turu")
+
+        Log.e("FCM", "Başlık : "+baslik+ "İçerik : $icerik" + " Bildirim_turu: $bildirim_turu")
 
 
     }
