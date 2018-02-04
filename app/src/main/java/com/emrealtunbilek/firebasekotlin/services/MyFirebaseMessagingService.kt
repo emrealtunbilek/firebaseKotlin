@@ -35,23 +35,96 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
     override fun onMessageReceived(p0: RemoteMessage?) {
 
-        var bildirimBaslik=p0?.notification?.title
-        var bildirimBody=p0?.notification?.body
-        var data=p0?.data
+
+        if(!activityKontrolEt()){
+            var bildirimBaslik=p0?.notification?.title
+            var bildirimBody=p0?.notification?.body
+            var data=p0?.data
 
 
-        var baslik=p0?.data?.get("baslik")
-        var icerik=p0?.data?.get("icerik")
-        var bildirim_turu=p0?.data?.get("bildirim_turu")
-        var sohbet_odasi_id=p0?.data?.get("sohbet_odasi_id")
+            var baslik=p0?.data?.get("baslik")
+            var icerik=p0?.data?.get("icerik")
+            var bildirim_turu=p0?.data?.get("bildirim_turu")
+            var sohbet_odasi_id=p0?.data?.get("sohbet_odasi_id")
 
-        Log.e("FCM", "Başlık : "+baslik+ "İçerik : $icerik" + " Bildirim_turu: $bildirim_turu"+ " Secilen sohbet odası:"+sohbet_odasi_id)
+            Log.e("FCM", "Başlık : "+baslik+ "İçerik : $icerik" + " Bildirim_turu: $bildirim_turu"+ " Secilen sohbet odası:"+sohbet_odasi_id)
+
+            var ref=FirebaseDatabase.getInstance().reference
+                    .child("sohbet_odasi")
+                    .orderByKey()
+                    .equalTo(sohbet_odasi_id)
+                    .addListenerForSingleValueEvent(object : ValueEventListener{
+                        override fun onCancelled(p0: DatabaseError?) {
+
+                        }
+
+                        override fun onDataChange(p0: DataSnapshot?) {
+                            var tekSohbetOdasi=p0?.children?.iterator()?.next()
+
+                            var oAnkiSohbetOdasi = SohbetOdasi()
+
+                            var nesneMap=(tekSohbetOdasi?.getValue() as java.util.HashMap<String, Object>)
+
+                            oAnkiSohbetOdasi.sohbetodasi_id=nesneMap.get("sohbetodasi_id").toString()
+                            oAnkiSohbetOdasi.sohbetodasi_adi=nesneMap.get("sohbetodasi_adi").toString()
+                            oAnkiSohbetOdasi.seviye=nesneMap.get("seviye").toString()
+                            oAnkiSohbetOdasi.olusturan_id=nesneMap.get("olusturan_id").toString()
+
+                            var gorulenMesajSayisi = tekSohbetOdasi.child("sohbet_odasindaki_kullanicilar")
+                                    .child(FirebaseAuth.getInstance().currentUser?.uid)
+                                    .child("okunan_mesaj_sayisi")
+                                    .getValue().toString().toInt()
+
+                            var toplamMesajSayisi=tekSohbetOdasi.child("sohbet_odasi_mesajlari").childrenCount.toInt()
+
+                            okunmayiBekleyenMesajSayisi=toplamMesajSayisi - gorulenMesajSayisi
+
+                            bildirimGonder(baslik, icerik, oAnkiSohbetOdasi)
+
+
+                        }
+
+
+                    })
+
+
+
+
+        }
 
 
 
 
     }
 
+    private fun bildirimGonder(baslik: String?, icerik: String?, oAnkiSohbetOdasi: SohbetOdasi) {
+
+        var bildirimID=notificationIDOlustur(oAnkiSohbetOdasi.sohbetodasi_id!!)
+        Log.e("AAA",""+bildirimID)
+
+
+
+    }
+
+    private fun activityKontrolEt():Boolean{
+
+        if(SohbetOdasiActivity.activityAcikMi){
+            return true
+        }else return false
+
+    }
+
+    private fun notificationIDOlustur(sohbetOdasiID:String):Int{
+
+        var id=0
+
+        for(i in 4..8){
+            id= id + sohbetOdasiID[i].toInt()
+        }
+
+
+        return id
+    }
 
 
 }

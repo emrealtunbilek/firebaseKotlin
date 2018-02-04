@@ -17,18 +17,22 @@ import kotlin.collections.HashMap
 import kotlin.collections.HashSet
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.DatabaseReference
-import android.widget.Toast
 import com.emrealtunbilek.firebasekotlin.model.FCMModel
-import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.io.IOException
 
 
 class SohbetOdasiActivity : AppCompatActivity() {
+
+
+    companion object {
+        var activityAcikMi:Boolean = false
+    }
+
+
 
     //Firebase
     var mAuthListener: FirebaseAuth.AuthStateListener? = null
@@ -40,6 +44,7 @@ class SohbetOdasiActivity : AppCompatActivity() {
     var tumMesajlar: ArrayList<SohbetMesaj>? = null
     var mesajIDSet: HashSet<String>? = null
     var myAdapter: SohbetMesajRecyclerviewAdapter? = null
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -216,7 +221,7 @@ class SohbetOdasiActivity : AppCompatActivity() {
         //cagrıldı an tüm mesajları getirir, sonrasında ise bir ekleme veya cıkarma durumunda tetiklenir
         override fun onDataChange(p0: DataSnapshot?) {
             sohbetOdasindakiMesajlariGetir()
-
+            gorunenMesajSayisiniGuncelle(p0?.childrenCount?.toInt())
         }
 
 
@@ -339,15 +344,28 @@ class SohbetOdasiActivity : AppCompatActivity() {
         }
     }
 
+    private fun gorunenMesajSayisiniGuncelle(toplamMesaj: Int?) {
+
+        var ref=FirebaseDatabase.getInstance().reference
+                .child("sohbet_odasi")
+                .child(secilenSohbetOdasiId)
+                .child("odadaki_kullanicilar")
+                .child(FirebaseAuth.getInstance().currentUser?.uid)
+                .child("son_gorunen_mesaj_sayisi")
+                .setValue(toplamMesaj)
+
+    }
 
 
     override fun onStart() {
         super.onStart()
+        activityAcikMi=true
         FirebaseAuth.getInstance().addAuthStateListener(mAuthListener!!)
     }
 
     override fun onStop() {
         super.onStop()
+        activityAcikMi=false
         if (mAuthListener != null) {
             FirebaseAuth.getInstance().removeAuthStateListener(mAuthListener!!)
         }
