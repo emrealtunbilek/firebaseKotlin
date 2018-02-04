@@ -19,6 +19,7 @@ import android.app.PendingIntent
 import android.content.Intent
 import android.content.ContentValues.TAG
 import android.content.Context
+import android.graphics.Bitmap
 import android.support.v4.app.NotificationCompat
 import com.emrealtunbilek.firebasekotlin.MainActivity
 import com.emrealtunbilek.firebasekotlin.R
@@ -30,54 +31,55 @@ import com.emrealtunbilek.firebasekotlin.SohbetOdasiActivity
  */
 class MyFirebaseMessagingService : FirebaseMessagingService() {
 
-    var okunmayiBekleyenMesajSayisi=0
+    var okunmayiBekleyenMesajSayisi = 0
 
 
     override fun onMessageReceived(p0: RemoteMessage?) {
 
 
-        if(!activityKontrolEt()){
-            var bildirimBaslik=p0?.notification?.title
-            var bildirimBody=p0?.notification?.body
-            var data=p0?.data
+        if (!activityKontrolEt()) {
+            Log.e("TTT","activity acık mı:"+activityKontrolEt())
+            var bildirimBaslik = p0?.notification?.title
+            var bildirimBody = p0?.notification?.body
+            var data = p0?.data
 
 
-            var baslik=p0?.data?.get("baslik")
-            var icerik=p0?.data?.get("icerik")
-            var bildirim_turu=p0?.data?.get("bildirim_turu")
-            var sohbet_odasi_id=p0?.data?.get("sohbet_odasi_id")
+            var baslik = p0?.data?.get("baslik")
+            var icerik = p0?.data?.get("icerik")
+            var bildirim_turu = p0?.data?.get("bildirim_turu")
+            var sohbet_odasi_id = p0?.data?.get("sohbet_odasi_id")
 
-            Log.e("FCM", "Başlık : "+baslik+ "İçerik : $icerik" + " Bildirim_turu: $bildirim_turu"+ " Secilen sohbet odası:"+sohbet_odasi_id)
+            Log.e("FCM", "Başlık : " + baslik + "İçerik : $icerik" + " Bildirim_turu: $bildirim_turu" + " Secilen sohbet odası:" + sohbet_odasi_id)
 
-            var ref=FirebaseDatabase.getInstance().reference
+            var ref = FirebaseDatabase.getInstance().reference
                     .child("sohbet_odasi")
                     .orderByKey()
                     .equalTo(sohbet_odasi_id)
-                    .addListenerForSingleValueEvent(object : ValueEventListener{
+                    .addListenerForSingleValueEvent(object : ValueEventListener {
                         override fun onCancelled(p0: DatabaseError?) {
 
                         }
 
                         override fun onDataChange(p0: DataSnapshot?) {
-                            var tekSohbetOdasi=p0?.children?.iterator()?.next()
+                            var tekSohbetOdasi = p0?.children?.iterator()?.next()
 
                             var oAnkiSohbetOdasi = SohbetOdasi()
 
-                            var nesneMap=(tekSohbetOdasi?.getValue() as java.util.HashMap<String, Object>)
+                            var nesneMap = (tekSohbetOdasi?.getValue() as java.util.HashMap<String, Object>)
 
-                            oAnkiSohbetOdasi.sohbetodasi_id=nesneMap.get("sohbetodasi_id").toString()
-                            oAnkiSohbetOdasi.sohbetodasi_adi=nesneMap.get("sohbetodasi_adi").toString()
-                            oAnkiSohbetOdasi.seviye=nesneMap.get("seviye").toString()
-                            oAnkiSohbetOdasi.olusturan_id=nesneMap.get("olusturan_id").toString()
+                            oAnkiSohbetOdasi.sohbetodasi_id = nesneMap.get("sohbetodasi_id").toString()
+                            oAnkiSohbetOdasi.sohbetodasi_adi = nesneMap.get("sohbetodasi_adi").toString()
+                            oAnkiSohbetOdasi.seviye = nesneMap.get("seviye").toString()
+                            oAnkiSohbetOdasi.olusturan_id = nesneMap.get("olusturan_id").toString()
 
-                            var gorulenMesajSayisi = tekSohbetOdasi.child("sohbet_odasindaki_kullanicilar")
+                            var gorulenMesajSayisi = tekSohbetOdasi.child("odadaki_kullanicilar")
                                     .child(FirebaseAuth.getInstance().currentUser?.uid)
                                     .child("okunan_mesaj_sayisi")
                                     .getValue().toString().toInt()
 
-                            var toplamMesajSayisi=tekSohbetOdasi.child("sohbet_odasi_mesajlari").childrenCount.toInt()
+                            var toplamMesajSayisi = tekSohbetOdasi.child("sohbet_odasi_mesajlari").childrenCount.toInt()
 
-                            okunmayiBekleyenMesajSayisi=toplamMesajSayisi - gorulenMesajSayisi
+                            okunmayiBekleyenMesajSayisi = toplamMesajSayisi - gorulenMesajSayisi
 
                             bildirimGonder(baslik, icerik, oAnkiSohbetOdasi)
 
@@ -88,38 +90,52 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
                     })
 
 
-
-
         }
-
-
 
 
     }
 
     private fun bildirimGonder(baslik: String?, icerik: String?, oAnkiSohbetOdasi: SohbetOdasi) {
 
-        var bildirimID=notificationIDOlustur(oAnkiSohbetOdasi.sohbetodasi_id!!)
-        Log.e("AAA",""+bildirimID)
+        var bildirimID = notificationIDOlustur(oAnkiSohbetOdasi.sohbetodasi_id!!)
+        Log.e("AAA", "" + bildirimID)
+
+        var builder = NotificationCompat.Builder(this, oAnkiSohbetOdasi.sohbetodasi_adi!!)
+                .setSmallIcon(R.drawable.ic_action_user)
+                .setLargeIcon(BitmapFactory.decodeResource(resources, R.drawable.ic_action_user))
+                .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
+                .setContentTitle(oAnkiSohbetOdasi.sohbetodasi_adi +" odasından "+baslik)
+                .setContentText("İÇERİK")
+                .setColor(getColor(R.color.colorAccent))
+                .setAutoCancel(true)
+                .setSubText(""+okunmayiBekleyenMesajSayisi+" yeni mesaj")
+                .setStyle(NotificationCompat.BigTextStyle().bigText(icerik))
+                .setNumber(okunmayiBekleyenMesajSayisi)
+                .setOnlyAlertOnce(true)
+
+        var notificationManager=getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+        notificationManager.notify(bildirimID, builder.build())
+
 
 
 
     }
 
-    private fun activityKontrolEt():Boolean{
+    private fun activityKontrolEt(): Boolean {
 
-        if(SohbetOdasiActivity.activityAcikMi){
+        if (SohbetOdasiActivity.activityAcikMi) {
             return true
-        }else return false
+        } else return false
 
     }
 
-    private fun notificationIDOlustur(sohbetOdasiID:String):Int{
+    private fun notificationIDOlustur(sohbetOdasiID: String): Int {
 
-        var id=0
+        var id = 0
 
-        for(i in 4..8){
-            id= id + sohbetOdasiID[i].toInt()
+        for (i in 4..8) {
+            id = id + sohbetOdasiID[i].toInt()
         }
 
 

@@ -126,7 +126,7 @@ class SohbetOdasiActivity : AppCompatActivity() {
                 var ref = FirebaseDatabase.getInstance().reference
                         .child("sohbet_odasi")
                         .child(secilenSohbetOdasiId)
-                        .child("sohbet_odasindaki_kullanicilar")
+                        .child("odadaki_kullanicilar")
                         .orderByKey()
                         .addListenerForSingleValueEvent(object : ValueEventListener {
                             override fun onCancelled(p0: DatabaseError?) {
@@ -221,6 +221,7 @@ class SohbetOdasiActivity : AppCompatActivity() {
         //cagrıldı an tüm mesajları getirir, sonrasında ise bir ekleme veya cıkarma durumunda tetiklenir
         override fun onDataChange(p0: DataSnapshot?) {
             sohbetOdasindakiMesajlariGetir()
+            if(activityAcikMi)
             gorunenMesajSayisiniGuncelle(p0?.childrenCount?.toInt())
         }
 
@@ -351,7 +352,7 @@ class SohbetOdasiActivity : AppCompatActivity() {
                 .child(secilenSohbetOdasiId)
                 .child("odadaki_kullanicilar")
                 .child(FirebaseAuth.getInstance().currentUser?.uid)
-                .child("son_gorunen_mesaj_sayisi")
+                .child("okunan_mesaj_sayisi")
                 .setValue(toplamMesaj)
 
     }
@@ -361,6 +362,12 @@ class SohbetOdasiActivity : AppCompatActivity() {
         super.onStart()
         activityAcikMi=true
         FirebaseAuth.getInstance().addAuthStateListener(mAuthListener!!)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        activityAcikMi=false
+        Log.e("OOO","PAUSE TETIKLENDI")
     }
 
     override fun onStop() {
