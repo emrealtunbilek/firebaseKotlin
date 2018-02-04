@@ -208,6 +208,18 @@ class SohbetOdasiActivity : AppCompatActivity() {
 
     }
 
+    private fun bildirimeGoreListele() {
+
+        var gelenintent=intent
+
+        if(intent.hasExtra("sohbet_odasi_id")){
+            secilenSohbetOdasiId = intent.getStringExtra("sohbet_odasi_id")
+            baslatMesajListener()
+        }
+
+
+    }
+
     private fun sohbetOdasiniOgren() {
         secilenSohbetOdasiId = intent.getStringExtra("sohbet_odasi_id")
         baslatMesajListener()

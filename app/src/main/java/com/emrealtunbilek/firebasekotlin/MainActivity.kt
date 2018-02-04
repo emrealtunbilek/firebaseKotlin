@@ -19,7 +19,21 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         initAuthStateListener()
         initFCM()
+        getPendingIntent()
 
+    }
+
+    private fun getPendingIntent() {
+        var gelenIntent=intent
+
+        if(gelenIntent.hasExtra("sohbet_odasi_id")){
+
+            var intent=Intent(this,SohbetOdasiActivity::class.java)
+            intent.putExtra("sohbet_odasi_id", gelenIntent.getStringExtra("sohbet_odasi_id") )
+            startActivity(intent)
+
+
+        }
     }
 
     private fun initFCM() {
