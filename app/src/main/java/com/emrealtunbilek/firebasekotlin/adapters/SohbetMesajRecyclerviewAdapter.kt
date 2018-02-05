@@ -9,8 +9,9 @@ import android.view.ViewGroup
 import com.emrealtunbilek.firebasekotlin.R
 import com.emrealtunbilek.firebasekotlin.model.SohbetMesaj
 import com.google.firebase.auth.FirebaseAuth
-import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.tek_satir_mesaj_layout.view.*
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 class SohbetMesajRecyclerviewAdapter(context: Context, tumMesajlar:ArrayList<SohbetMesaj>):RecyclerView.Adapter<SohbetMesajRecyclerviewAdapter.SohbetMesajViewHolder>() {
@@ -19,9 +20,14 @@ class SohbetMesajRecyclerviewAdapter(context: Context, tumMesajlar:ArrayList<Soh
     var myTumMesajlar=tumMesajlar
 
 
+
+
+
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): SohbetMesajViewHolder {
 
         var inflater=LayoutInflater.from(myContext)
+
+
 
         var view:View? = null
         if(viewType==2)
@@ -59,7 +65,7 @@ class SohbetMesajRecyclerviewAdapter(context: Context, tumMesajlar:ArrayList<Soh
     inner class SohbetMesajViewHolder(itemView:View?):RecyclerView.ViewHolder(itemView){
 
         var tumLayout=itemView as ConstraintLayout
-        var profilResmi=tumLayout.imgMesajprofilResmi
+      //  var profilResmi=tumLayout.imgMesajprofilResmi
         var mesaj=tumLayout.tvMesaj
         var isim=tumLayout.tvMesajUserAd
         var tarih=tumLayout.tvMesajTarih
@@ -70,15 +76,21 @@ class SohbetMesajRecyclerviewAdapter(context: Context, tumMesajlar:ArrayList<Soh
 
             mesaj.text=oanKiMesaj.mesaj
             isim.text=oanKiMesaj.adi
-            tarih.text=oanKiMesaj.timestamp
 
+            val format = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale("tr"))
+            val parsedDate = format.parse(oanKiMesaj.timestamp)
+            val timestamp = java.sql.Time(parsedDate.time)
+
+            tarih.text=timestamp.toString()
+/*
             if(!oanKiMesaj.profil_resmi.isNullOrEmpty()){
                 Picasso.with(myContext).load(oanKiMesaj.profil_resmi).resize(48,48).into(profilResmi)
             }
-
+*/
 
 
         }
+
 
 
     }

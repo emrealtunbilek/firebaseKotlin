@@ -4,6 +4,8 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.view.Window
+import android.view.WindowManager
 import android.widget.Toast
 import com.emrealtunbilek.firebasekotlin.model.Kullanici
 import com.google.android.gms.tasks.OnCompleteListener
@@ -17,6 +19,8 @@ class RegisterActivity : Activity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        requestWindowFeature(Window.FEATURE_NO_TITLE)
+        window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
         setContentView(R.layout.activity_register)
 
 
@@ -31,6 +35,11 @@ class RegisterActivity : Activity() {
             } else {
                 Toast.makeText(this, "Boş alanları doldurunuz", Toast.LENGTH_SHORT).show()
             }
+        }
+
+        imgBack.setOnClickListener {
+
+            super.onBackPressed()
         }
     }
 

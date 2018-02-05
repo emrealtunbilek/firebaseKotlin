@@ -3,10 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/dialog_bg"
     tools:context="com.emrealtunbilek.firebasekotlin.dialogs.ProfilResmiFragment">
 
 
-    <TextView
+    <com.emrealtunbilek.firebasekotlin.MyTextView
         android:id="@+id/tvKameradanFoto"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -14,13 +15,16 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:text="Yeni Fotoğraf Çek"
+        android:drawableLeft="@drawable/ic_linked_camera"
+        android:drawableTint="@color/colorAccent"
         android:textSize="16sp"
         android:textStyle="bold"
+        android:padding="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
+    <com.emrealtunbilek.firebasekotlin.MyTextView
         android:id="@+id/tvGaleridenFoto"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -29,6 +33,9 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:text="Galeriden Seç"
+        android:padding="10dp"
+        android:drawableLeft="@drawable/ic_photo"
+        android:drawableTint="@color/colorAccent"
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"

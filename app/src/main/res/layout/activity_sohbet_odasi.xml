@@ -4,6 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:background="@drawable/bg"
     android:layout_height="match_parent">
 
 
@@ -18,10 +19,11 @@
         app:layout_constraintBottom_toTopOf="@+id/etYeniMesaj"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/imgBackSohbetOdasiActivity" />
 
-    <EditText
+    <com.emrealtunbilek.firebasekotlin.MyEditText
         android:id="@+id/etYeniMesaj"
+        android:background="@drawable/edittext_rounded_bg"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
@@ -30,6 +32,7 @@
         android:layout_marginTop="8dp"
         android:ems="10"
         android:hint="mesaj yazın.."
+        android:padding="10dp"
         android:inputType="textPersonName"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/imgMesajGonder"
@@ -45,4 +48,29 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@drawable/ic_send" />
+
+    <ImageView
+        android:id="@+id/imgBackSohbetOdasiActivity"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_action_arrow_left" />
+
+    <com.emrealtunbilek.firebasekotlin.MyTextView
+        android:id="@+id/tvSohbetOdasiAdi"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="16dp"
+        android:text="SOHBET ODASI ADI"
+        android:textAlignment="textStart"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/imgBackSohbetOdasiActivity"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/imgBackSohbetOdasiActivity"
+        app:layout_constraintTop_toTopOf="@+id/imgBackSohbetOdasiActivity" />
 </android.support.constraint.ConstraintLayout>

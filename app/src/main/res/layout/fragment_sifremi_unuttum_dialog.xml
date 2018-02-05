@@ -3,30 +3,34 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/dialog_bg"
     tools:context="com.emrealtunbilek.firebasekotlin.dialogs.SifremiUnuttumDialogFragment">
 
 
-    <TextView
+    <com.emrealtunbilek.firebasekotlin.MyTextView
         android:id="@+id/textView2"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:background="@drawable/dialog_textviewbaslik_rounded_bg"
         android:text="Şifreyi Tekrar Gönder"
-        android:textSize="18sp"
+        android:textAlignment="center"
+        android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <EditText
+    <com.emrealtunbilek.firebasekotlin.MyEditText
         android:id="@+id/etSifreyiTekrarGonder"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
+        android:padding="10dp"
+        android:background="@drawable/dialog_edittext_rounded_bg"
+        android:drawableLeft="@drawable/ic_mail"
+        android:drawableTint="@color/colorAccent"
         android:ems="10"
         android:hint="Email"
         android:inputType="textEmailAddress"
@@ -38,17 +42,29 @@
         android:id="@+id/btnSifreyiUnuttumGonder"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
+        android:background="@drawable/buton_background"
         android:text="GÖNDER"
-        app:layout_constraintEnd_toEndOf="@+id/etSifreyiTekrarGonder"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/btnSifreyiUnuttumIptal"
         app:layout_constraintTop_toBottomOf="@+id/etSifreyiTekrarGonder" />
 
     <Button
         android:id="@+id/btnSifreyiUnuttumIptal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
+        android:background="@drawable/buton_background"
         android:text="IPTAL"
-        app:layout_constraintStart_toStartOf="@+id/etSifreyiTekrarGonder"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/btnSifreyiUnuttumGonder"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/etSifreyiTekrarGonder" />
 </android.support.constraint.ConstraintLayout>

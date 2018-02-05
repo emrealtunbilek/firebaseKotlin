@@ -5,6 +5,8 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
+import android.view.Window
+import android.view.WindowManager
 import com.emrealtunbilek.firebasekotlin.adapters.SohbetMesajRecyclerviewAdapter
 import com.emrealtunbilek.firebasekotlin.model.Kullanici
 import com.emrealtunbilek.firebasekotlin.model.SohbetMesaj
@@ -18,6 +20,8 @@ import kotlin.collections.HashSet
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.DatabaseReference
 import com.emrealtunbilek.firebasekotlin.model.FCMModel
+import com.emrealtunbilek.firebasekotlin.model.SohbetOdasi
+import kotlinx.android.synthetic.main.activity_sohbet.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -49,6 +53,8 @@ class SohbetOdasiActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        requestWindowFeature(Window.FEATURE_NO_TITLE)
+        window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
         setContentView(R.layout.activity_sohbet_odasi)
 
         //kullanıcının giriş çıkış işlemleri dinler
@@ -87,6 +93,11 @@ class SohbetOdasiActivity : AppCompatActivity() {
 
             rvMesajlar.smoothScrollToPosition(myAdapter!!.itemCount - 1)
 
+        }
+
+        imgBackSohbetOdasiActivity.setOnClickListener {
+
+            super.onBackPressed()
         }
 
 
@@ -222,6 +233,24 @@ class SohbetOdasiActivity : AppCompatActivity() {
 
     private fun sohbetOdasiniOgren() {
         secilenSohbetOdasiId = intent.getStringExtra("sohbet_odasi_id")
+        var secilenSohbetOdasiAdi:String?=null
+        var ref=FirebaseDatabase.getInstance().reference
+                .child("sohbet_odasi")
+                .child(secilenSohbetOdasiId)
+                .child("sohbetodasi_adi")
+                .addListenerForSingleValueEvent(object :ValueEventListener{
+            override fun onCancelled(p0: DatabaseError?) {
+
+            }
+
+            override fun onDataChange(p0: DataSnapshot?) {
+                //var singleSnapShot = p0?.children?.iterator()?.next()
+                secilenSohbetOdasiAdi=p0?.value.toString()
+                tvSohbetOdasiAdi.text=secilenSohbetOdasiAdi
+            }
+
+        })
+
         baslatMesajListener()
     }
 

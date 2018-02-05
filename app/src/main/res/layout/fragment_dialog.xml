@@ -3,34 +3,45 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/dialog_bg"
     tools:context="com.emrealtunbilek.firebasekotlin.dialogs.OnayMailTekrarGonderFragment">
 
 
-    <EditText
+    <com.emrealtunbilek.firebasekotlin.MyEditText
         android:id="@+id/etDialogMail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
+        android:background="@drawable/dialog_edittext_rounded_bg"
         android:ems="10"
+        android:drawableLeft="@drawable/ic_mail"
+        android:drawableTint="@color/colorAccent"
         android:hint="Email"
         android:inputType="textEmailAddress"
+        android:padding="10dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.503"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/myTextView2" />
 
-    <EditText
+    <com.emrealtunbilek.firebasekotlin.MyEditText
         android:id="@+id/etDialogSifre"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
+        android:drawableLeft="@drawable/ic_lock_open"
+        android:drawableTint="@color/colorAccent"
         android:layout_marginTop="8dp"
+        android:background="@drawable/dialog_edittext_rounded_bg"
         android:ems="10"
         android:hint="Şifre"
         android:inputType="textPassword"
+        android:padding="10dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.503"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/etDialogMail" />
 
@@ -38,21 +49,43 @@
         android:id="@+id/btnDialogGonder"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
         android:layout_marginEnd="8dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
+        android:background="@drawable/buton_background"
         android:text="Gönder"
-        app:layout_constraintEnd_toEndOf="@+id/etDialogSifre"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/btnDialogIptal"
         app:layout_constraintTop_toBottomOf="@+id/etDialogSifre" />
 
     <Button
         android:id="@+id/btnDialogIptal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
         android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
+        android:background="@drawable/buton_background"
         android:text="Iptal"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/btnDialogGonder"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/etDialogSifre"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/etDialogSifre" />
+
+    <com.emrealtunbilek.firebasekotlin.MyTextView
+        android:id="@+id/myTextView2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/dialog_textviewbaslik_rounded_bg"
+        android:padding="10dp"
+        android:text="Onay Mailini Tekrar Gönder"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Onay Mailini Tekrar Gönder" />
 </android.support.constraint.ConstraintLayout>

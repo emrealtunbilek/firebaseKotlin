@@ -6,6 +6,8 @@ import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import android.view.View
+import android.view.Window
+import android.view.WindowManager
 import android.widget.Toast
 import com.emrealtunbilek.firebasekotlin.adapters.SohbetOdasiRecyclerViewAdapter
 import com.emrealtunbilek.firebasekotlin.dialogs.YeniSohbetOdasiFDialogFragment
@@ -15,6 +17,7 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import kotlinx.android.synthetic.main.activity_register.*
 import kotlinx.android.synthetic.main.activity_sohbet.*
 import java.util.*
 import kotlin.collections.ArrayList
@@ -25,6 +28,8 @@ class SohbetActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        requestWindowFeature(Window.FEATURE_NO_TITLE)
+        window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
         setContentView(R.layout.activity_sohbet)
         init()
 
@@ -41,6 +46,11 @@ class SohbetActivity : AppCompatActivity() {
             var dialog= YeniSohbetOdasiFDialogFragment()
             dialog.show(supportFragmentManager,"gosteryenisohbetodasi")
 
+        }
+
+        imgBackSohbetActivity.setOnClickListener {
+
+            super.onBackPressed()
         }
 
 

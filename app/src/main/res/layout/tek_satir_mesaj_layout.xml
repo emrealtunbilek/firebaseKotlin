@@ -3,56 +3,52 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/tekMesajRootLayout"
-    android:layout_width="match_parent"
-    android:background="@android:color/darker_gray"
-    android:layout_margin="10dp"
-    android:layout_height="wrap_content">
-
-    <ImageView
-        android:id="@+id/imgMesajprofilResmi"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_action_user" />
+    android:layout_width="250dp"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="4dp"
+    android:layout_marginTop="4dp"
+    android:background="@drawable/alinanmesaj">
 
     <TextView
         android:id="@+id/tvMesaj"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
         android:text="mesaj"
         android:textAlignment="textStart"
-        app:layout_constraintBottom_toBottomOf="@+id/imgMesajprofilResmi"
+        android:textColor="@android:color/black"
+        android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/imgMesajprofilResmi"
-        app:layout_constraintTop_toTopOf="@+id/imgMesajprofilResmi" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/tvMesajUserAd"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="16dp"
         android:text="yazar"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imgMesajprofilResmi" />
+        android:textColor="@color/colorAccent"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/tvMesaj"
+        app:layout_constraintTop_toBottomOf="@+id/tvMesaj" />
 
     <TextView
         android:id="@+id/tvMesajTarih"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:text="tarih"
+        android:textAlignment="textEnd"
+        android:textColor="@color/colorAccent"
+        android:textSize="12sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/tvMesajUserAd"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/tvMesajUserAd"
+        app:layout_constraintEnd_toEndOf="@+id/tvMesaj"
         app:layout_constraintTop_toTopOf="@+id/tvMesajUserAd" />
 </android.support.constraint.ConstraintLayout>

@@ -1,82 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/rootlayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="3dp">
+    android:background="@drawable/teksatirsohbetoda"
+    android:layout_marginBottom="10dp"
+    >
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
 
-        <RelativeLayout
-            android:id="@+id/relLayout1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="10dp">
+    <ImageView
+        android:id="@+id/imgProfilResmiSohbetOdasi"
+        android:layout_width="72dp"
+        android:layout_height="75dp"
+        android:src="@drawable/ic_action_user"
+        android:tint="@null"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-            <ImageView
-                android:id="@+id/imgProfilResmiSohbetOdasi"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:scaleType="centerCrop"
-                android:src="@drawable/ic_action_user"
-                app:srcCompat="@drawable/ic_action_user" />
+    <ImageView
+        android:id="@+id/imgSohbetOdasiSil"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_action_trash" />
 
-            <TextView
-                android:id="@+id/tvOlusturanAdi"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginBottom="20dp"
-                android:layout_marginLeft="10dp"
-                android:layout_toLeftOf="@+id/imgSohbetOdasiSil"
-                android:layout_toRightOf="@id/imgProfilResmiSohbetOdasi"
-                android:text="Yazar"
-                android:textColor="@color/colorAccent"
-                android:textSize="13sp" />
+    <com.emrealtunbilek.firebasekotlin.MyTextView
+        android:id="@+id/tvSohbetOdasiAdi"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="48dp"
+        android:layout_marginTop="8dp"
+        android:text="TextView"
+        android:textAlignment="textEnd"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/imgSohbetOdasiSil"
+        app:layout_constraintEnd_toStartOf="@+id/imgSohbetOdasiSil"
+        app:layout_constraintStart_toEndOf="@+id/imgProfilResmiSohbetOdasi"
+        app:layout_constraintTop_toTopOf="parent" />
 
-            <ImageView
-                android:id="@+id/imgSohbetOdasiSil"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_alignParentRight="true"
-                android:scaleType="centerCrop"
-                android:src="@drawable/ic_action_trash"
-                app:srcCompat="@drawable/ic_action_trash" />
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/relLayout1"
-            android:layout_marginBottom="10dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginTop="10dp">
-
-            <TextView
-                android:id="@+id/tvMesajSayisi"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:text="kaç tane"
-                android:textSize="13sp" />
-
-            <TextView
-                android:id="@+id/tvSohbetOdasiAdi"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_toLeftOf="@+id/tvMesajSayisi"
-                android:text="Sohbet Odası Adı"
-                android:textSize="15sp" />
-
-        </RelativeLayout>
-
-    </RelativeLayout>
-
-</RelativeLayout>
+    <com.emrealtunbilek.firebasekotlin.MyTextView
+        android:id="@+id/tvMesajSayisi"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="8dp"
+        android:text="TextView"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/imgSohbetOdasiSil"
+        app:layout_constraintTop_toBottomOf="@+id/imgSohbetOdasiSil" />
+</android.support.constraint.ConstraintLayout>

@@ -3,37 +3,46 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/dialog_bg"
     tools:context="com.emrealtunbilek.firebasekotlin.dialogs.YeniSohbetOdasiFDialogFragment">
 
 
-    <TextView
+    <com.emrealtunbilek.firebasekotlin.MyTextView
         android:id="@+id/textView6"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:text="Sohbet Odası Adı:"
+        android:textSize="16sp"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/myTextView4" />
 
-    <EditText
+    <com.emrealtunbilek.firebasekotlin.MyEditText
         android:id="@+id/etYeniSohbetOdasiAdi"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
+        android:background="@drawable/dialog_edittext_rounded_bg"
         android:ems="10"
         android:inputType="textPersonName"
+        android:padding="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView6" />
 
-    <TextView
+    <com.emrealtunbilek.firebasekotlin.MyTextView
         android:id="@+id/textView7"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:text="Seviye:"
+        android:textSize="16sp"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/etYeniSohbetOdasiAdi" />
 
@@ -46,10 +55,11 @@
         android:layout_marginTop="8dp"
         android:max="10"
         app:layout_constraintEnd_toEndOf="@+id/etYeniSohbetOdasiAdi"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView7" />
 
-    <TextView
+    <com.emrealtunbilek.firebasekotlin.MyTextView
         android:id="@+id/tvYeniSohbetSeviye"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -57,7 +67,10 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:text="Seviye"
+        android:textSize="18sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="@+id/seekBarSeviye"
+        app:layout_constraintHorizontal_bias="0.469"
         app:layout_constraintStart_toStartOf="@+id/seekBarSeviye"
         app:layout_constraintTop_toBottomOf="@+id/seekBarSeviye" />
 
@@ -65,9 +78,28 @@
         android:id="@+id/btnYeniSohbetodasiOlustur"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
+        android:background="@drawable/buton_background"
         android:text="OLUSTUR"
-        app:layout_constraintEnd_toEndOf="@+id/seekBarSeviye"
-        app:layout_constraintTop_toBottomOf="@+id/tvYeniSohbetSeviye" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvYeniSohbetSeviye"
+        app:layout_constraintVertical_bias="0.545" />
+
+    <com.emrealtunbilek.firebasekotlin.MyTextView
+        android:id="@+id/myTextView4"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Yeni Sohbet Odası"
+        android:background="@drawable/dialog_textviewbaslik_rounded_bg"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 </android.support.constraint.ConstraintLayout>
