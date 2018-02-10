@@ -80,7 +80,7 @@ class SohbetOdasiActivity : AppCompatActivity() {
             override fun onDataChange(p0: DataSnapshot?) {
                 var singleSnapShot = p0?.children?.iterator()?.next()
                 SERVER_KEY = singleSnapShot?.getValue().toString()
-                Log.e("SERVERKEY", "OKUNAN SERVERKEY=" + SERVER_KEY)
+
             }
 
 
@@ -176,11 +176,9 @@ class SohbetOdasiActivity : AppCompatActivity() {
                                                         var istek = myInterface.bildirimGonder(headers, bildirim)
                                                         istek.enqueue(object : Callback<Response<FCMModel>> {
                                                             override fun onResponse(call: Call<Response<FCMModel>>?, response: Response<Response<FCMModel>>?) {
-                                                                Log.e("RETROFIT", "BASARILI : " + response?.raw() + " MESAJ:" + call?.request())
                                                             }
 
                                                             override fun onFailure(call: Call<Response<FCMModel>>?, t: Throwable?) {
-                                                                Log.e("RETROFIT", "HATA : " + t?.message)
                                                             }
 
                                                         })
@@ -309,10 +307,10 @@ class SohbetOdasiActivity : AppCompatActivity() {
 
                                         override fun onDataChange(p0: DataSnapshot?) {
                                             var bulunanKullanici = p0?.children?.iterator()?.next()
-                                            Log.e("XXX", bulunanKullanici?.getValue(Kullanici::class.java)?.profil_resmi)
+
                                             geciciMesaj.profil_resmi = bulunanKullanici?.getValue(Kullanici::class.java)?.profil_resmi
                                             geciciMesaj.adi = bulunanKullanici?.getValue(Kullanici::class.java)?.isim
-                                            Log.e("XXX", bulunanKullanici?.getValue(Kullanici::class.java)?.isim)
+
                                             myAdapter?.notifyDataSetChanged()
                                         }
 
@@ -408,7 +406,7 @@ class SohbetOdasiActivity : AppCompatActivity() {
     override fun onPause() {
         super.onPause()
         activityAcikMi=false
-        Log.e("OOO","PAUSE TETIKLENDI")
+
     }
 
     override fun onStop() {

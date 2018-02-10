@@ -14,15 +14,20 @@ class MyFirebaseInstanceIDService : FirebaseInstanceIdService() {
     override fun onTokenRefresh() {
         var refreshedToken:String? = FirebaseInstanceId.getInstance().token
 
-        tokenVeriTabaninaKaydet(refreshedToken)
+        if(!refreshedToken.isNullOrEmpty()){
+            tokenVeriTabaninaKaydet(refreshedToken)
+        }
+
     }
 
     private fun tokenVeriTabaninaKaydet(refreshedToken: String?) {
 
-        var ref=FirebaseDatabase.getInstance().reference
-                .child("kullanici")
-                .child(FirebaseAuth.getInstance().currentUser?.uid)
-                .child("mesaj_token")
-                .setValue(refreshedToken)
+        if(FirebaseAuth.getInstance().currentUser != null) {
+            var ref = FirebaseDatabase.getInstance().reference
+                    .child("kullanici")
+                    .child(FirebaseAuth.getInstance().currentUser?.uid)
+                    .child("mesaj_token")
+                    .setValue(refreshedToken)
+        }
     }
 }

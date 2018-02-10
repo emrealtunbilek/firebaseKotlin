@@ -30,7 +30,6 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.UploadTask
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_kullanici.*
-import kotlinx.android.synthetic.main.activity_register.*
 import java.io.ByteArrayOutputStream
 import java.lang.Exception
 
@@ -80,7 +79,7 @@ class KullaniciAyarlariActivity : AppCompatActivity(), ProfilResmiFragment.onPro
             //galeriden resim seçilmiş
             if (myBitmap == null) {
                 myBitmap = MediaStore.Images.Media.getBitmap(this@KullaniciAyarlariActivity.contentResolver, params[0])
-                Log.e("TEST", "Orjinal resmin boyutu:" + (myBitmap!!.byteCount).toDouble() / MEGABYTE)
+
             }
 
             var resimBytes: ByteArray? = null
@@ -363,8 +362,15 @@ class KullaniciAyarlariActivity : AppCompatActivity(), ProfilResmiFragment.onPro
                     var okunanKullanici = singleSnapshot.getValue(Kullanici::class.java)
                     etKullaniciAdi.setText(okunanKullanici?.isim)
                     etKullaniciTelefon.setText(okunanKullanici?.telefon)
+                    if(okunanKullanici?.profil_resmi!!.isNullOrBlank() or okunanKullanici?.profil_resmi!!.isNullOrEmpty()){
+                        Picasso.with(this@KullaniciAyarlariActivity).load(R.drawable.defaultprofilepic).resize(100, 100).into(imgCircleProfil)
+
+                    }else {
+                        Picasso.with(this@KullaniciAyarlariActivity).load(okunanKullanici?.profil_resmi).resize(100, 100).into(imgCircleProfil)
+
+                    }
                     Picasso.with(this@KullaniciAyarlariActivity).load(okunanKullanici?.profil_resmi).resize(100, 100).into(imgCircleProfil)
-                    Log.e("FIREBASE", "Adı:" + okunanKullanici?.isim + " Telefon:" + okunanKullanici?.telefon + " Uid:" + okunanKullanici?.kullanici_id + " Seviye:" + okunanKullanici?.seviye)
+
                 }
             }
 
@@ -385,7 +391,6 @@ class KullaniciAyarlariActivity : AppCompatActivity(), ProfilResmiFragment.onPro
                     var okunanKullanici = singleSnapshot.getValue(Kullanici::class.java)
                     //  etKullaniciAdi.setText(okunanKullanici?.isim)
                     //etKullaniciTelefon.setText(okunanKullanici?.telefon)
-                    Log.e("FIREBASE2", "Adı:" + okunanKullanici?.isim + " Telefon:" + okunanKullanici?.telefon + " Uid:" + okunanKullanici?.kullanici_id + " Seviye:" + okunanKullanici?.seviye)
                 }
             }
 
@@ -408,7 +413,6 @@ class KullaniciAyarlariActivity : AppCompatActivity(), ProfilResmiFragment.onPro
                     // var okunanKullanici = singleSnapshot.getValue(Kullanici::class.java)
                     //  etKullaniciAdi.setText(okunanKullanici?.isim)
                     //etKullaniciTelefon.setText(okunanKullanici?.telefon)
-                    Log.e("FIREBASE3", singleSnapshot?.value.toString())
                 }
             }
 

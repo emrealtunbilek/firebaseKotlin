@@ -2,19 +2,18 @@ package com.emrealtunbilek.firebasekotlin.adapters
 
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
+import android.renderscript.Sampler
 import android.support.constraint.ConstraintLayout
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.view.ContextThemeWrapper
-import android.support.v7.widget.AlertDialogLayout
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.RelativeLayout
 import android.widget.Toast
 import com.emrealtunbilek.firebasekotlin.R
 import com.emrealtunbilek.firebasekotlin.SohbetActivity
@@ -84,7 +83,7 @@ class SohbetOdasiRecyclerViewAdapter(mActivity:AppCompatActivity, tumSohbetOdala
                     dialog.setPositiveButton("Evet Sil", object :DialogInterface.OnClickListener{
                         override fun onClick(dialog: DialogInterface?, which: Int) {
 
-                            (myActivity as SohbetActivity).sohbetOdasiSil(oAnOlusturulanSohbetOdasi.sohbetodasi_id.toString())
+                            (myActivity as SohbetActivity).sohbetOdasiSil(oAnOlusturulanSohbetOdasi)
                         }
 
                     })
@@ -112,11 +111,43 @@ class SohbetOdasiRecyclerViewAdapter(mActivity:AppCompatActivity, tumSohbetOdala
 
             tekSatirSohbetOdasi.setOnClickListener {
 
-                kullaniciyiSohbetOdasinaKaydet(oAnOlusturulanSohbetOdasi)
 
-                var intent=Intent(myActivity,SohbetOdasiActivity::class.java)
-                intent.putExtra("sohbet_odasi_id",oAnOlusturulanSohbetOdasi.sohbetodasi_id)
-                myActivity.startActivity(intent)
+
+                var kullanici=FirebaseAuth.getInstance().currentUser
+                var seviye=0
+                var ref=FirebaseDatabase.getInstance().reference
+                        .child("kullanici")
+                        .orderByKey()
+                        .equalTo(kullanici?.uid)
+                        .addListenerForSingleValueEvent(object : ValueEventListener{
+                            override fun onCancelled(p0: DatabaseError?) {
+
+                            }
+
+                            override fun onDataChange(p0: DataSnapshot?) {
+                              for (tekKullanici in p0?.children!!){
+                                  var okunanKullanici=tekKullanici.getValue(Kullanici::class.java)
+                                  seviye=okunanKullanici?.seviye?.toInt()!!
+
+                                  if(oAnOlusturulanSohbetOdasi.seviye?.toInt()!! <= seviye){
+
+                                      kullaniciyiSohbetOdasinaKaydet(oAnOlusturulanSohbetOdasi)
+
+                                      var intent=Intent(myActivity,SohbetOdasiActivity::class.java)
+                                      intent.putExtra("sohbet_odasi_id",oAnOlusturulanSohbetOdasi.sohbetodasi_id)
+                                      myActivity.startActivity(intent)
+                                  }else {
+                                      Toast.makeText(myActivity,"Seviyeniz yeterli değil",Toast.LENGTH_SHORT).show()
+                                  }
+
+                              }
+                            }
+
+                        })
+
+
+
+
 
 
             }
@@ -134,7 +165,14 @@ class SohbetOdasiRecyclerViewAdapter(mActivity:AppCompatActivity, tumSohbetOdala
                 override fun onDataChange(p0: DataSnapshot?) {
                   for(kullanici in p0!!.children){
                       var profilResmiPath=kullanici.getValue(Kullanici::class.java)?.profil_resmi.toString()
-                      Picasso.with(itemView.context).load(profilResmiPath).resize(72,75).into(sohbetOdasiResim)
+                      if(profilResmiPath.isNullOrEmpty() or profilResmiPath.isNullOrBlank())
+                      {
+                          Picasso.with(itemView.context).load(R.drawable.defaultprofilepic).resize(72,72).into(sohbetOdasiResim)
+
+                      }else {
+                          Picasso.with(itemView.context).load(profilResmiPath).resize(72,72).into(sohbetOdasiResim)
+                      }
+                      Picasso.with(itemView.context).load(profilResmiPath).resize(72,72).into(sohbetOdasiResim)
                      // sohbetOdasiOlusturan.text=kullanici.getValue(Kullanici::class.java)?.isim.toString()
                   }
                 }
