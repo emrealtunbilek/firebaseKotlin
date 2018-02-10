@@ -18,8 +18,8 @@ android {
         applicationId "com.emrealtunbilek.firebasekotlin"
         minSdkVersion 21
         targetSdkVersion 26
-        versionCode 3
-        versionName "3.0"
+        versionCode 6
+        versionName "6.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {

@@ -62,7 +62,7 @@ class SohbetOdasiRecyclerViewAdapter(mActivity:AppCompatActivity, tumSohbetOdala
 
         var tekSatirSohbetOdasi=itemView as ConstraintLayout
         var sohbetOdasiResim = tekSatirSohbetOdasi.imgProfilResmiSohbetOdasi
-        var sohbetOdasiSil=tekSatirSohbetOdasi.imgSohbetOdasiSil
+       // var sohbetOdasiSil=tekSatirSohbetOdasi.imgSohbetOdasiSil
         var sohbetOdasiMesajSayisi=tekSatirSohbetOdasi.tvMesajSayisi
         var sohbetOdasiAdi = tekSatirSohbetOdasi.tvSohbetOdasiAdi
 
@@ -72,7 +72,7 @@ class SohbetOdasiRecyclerViewAdapter(mActivity:AppCompatActivity, tumSohbetOdala
         fun setData(oAnOlusturulanSohbetOdasi: SohbetOdasi, position: Int) {
             sohbetOdasiAdi.text=oAnOlusturulanSohbetOdasi.sohbetodasi_adi
            // sohbetOdasiOlusturan.text=oAnOlusturulanSohbetOdasi.sohbetodasi_id
-            sohbetOdasiSil.setOnClickListener {
+          /*sohbetOdasiSil.setOnClickListener {
 
                 if(oAnOlusturulanSohbetOdasi.olusturan_id.equals(FirebaseAuth.getInstance().currentUser?.uid)){
 
@@ -102,12 +102,12 @@ class SohbetOdasiRecyclerViewAdapter(mActivity:AppCompatActivity, tumSohbetOdala
 
                 }else{
 
-                    Toast.makeText(itemView.context,"Bu sohbet odasını sen oluşturmadın ki silesin!!1",Toast.LENGTH_SHORT).show()
+                    Toast.makeText(itemView.context,"Bu sohbet odasını sen oluşturmadın ki silesin!!",Toast.LENGTH_SHORT).show()
 
                 }
 
 
-            }
+            }*/
 
             tekSatirSohbetOdasi.setOnClickListener {
 
@@ -172,7 +172,7 @@ class SohbetOdasiRecyclerViewAdapter(mActivity:AppCompatActivity, tumSohbetOdala
                       }else {
                           Picasso.with(itemView.context).load(profilResmiPath).resize(72,72).into(sohbetOdasiResim)
                       }
-                      Picasso.with(itemView.context).load(profilResmiPath).resize(72,72).into(sohbetOdasiResim)
+
                      // sohbetOdasiOlusturan.text=kullanici.getValue(Kullanici::class.java)?.isim.toString()
                   }
                 }

@@ -290,6 +290,7 @@ class SohbetOdasiActivity : AppCompatActivity() {
                             var geciciMesaj = SohbetMesaj()
                             var kullaniciID = tekMesaj.getValue(SohbetMesaj::class.java)!!.kullanici_id
 
+
                             if (!mesajIDSet!!.contains(tekMesaj.key)) {
 
                                 mesajIDSet!!.add(tekMesaj.key)
@@ -306,12 +307,14 @@ class SohbetOdasiActivity : AppCompatActivity() {
                                         }
 
                                         override fun onDataChange(p0: DataSnapshot?) {
-                                            var bulunanKullanici = p0?.children?.iterator()?.next()
 
-                                            geciciMesaj.profil_resmi = bulunanKullanici?.getValue(Kullanici::class.java)?.profil_resmi
-                                            geciciMesaj.adi = bulunanKullanici?.getValue(Kullanici::class.java)?.isim
+                                            if(p0?.exists()!!){
+                                                var bulunanKullanici = p0.children?.iterator()?.next()
+                                                geciciMesaj.profil_resmi = bulunanKullanici?.getValue(Kullanici::class.java)?.profil_resmi
+                                                geciciMesaj.adi = bulunanKullanici?.getValue(Kullanici::class.java)?.isim
 
-                                            myAdapter?.notifyDataSetChanged()
+                                                myAdapter?.notifyDataSetChanged()
+                                            }
                                         }
 
 
@@ -322,6 +325,7 @@ class SohbetOdasiActivity : AppCompatActivity() {
                                     rvMesajlar.scrollToPosition(myAdapter!!.itemCount - 1)
 
                                 } else {
+
                                     geciciMesaj.mesaj = tekMesaj.getValue(SohbetMesaj::class.java)!!.mesaj
                                     geciciMesaj.timestamp = tekMesaj.getValue(SohbetMesaj::class.java)!!.timestamp
                                     geciciMesaj.profil_resmi = ""

@@ -69,7 +69,7 @@ class SohbetActivity : AppCompatActivity() {
         //cagrıldı an tüm mesajları getirir, sonrasında ise bir ekleme veya cıkarma durumunda tetiklenir
         override fun onDataChange(p0: DataSnapshot?) {
 
-
+            myAdapter?.notifyDataSetChanged()
             tumSohbetOdalariniGetir()
         }
 
@@ -84,8 +84,7 @@ class SohbetActivity : AppCompatActivity() {
     }
 
     private fun tumSohbetOdalariniGetir() {
-        tumSohbetOdalari=null
-        sohbetOdasiIDSet=null
+
 
         if (tumSohbetOdalari == null) {
             tumSohbetOdalari=ArrayList<SohbetOdasi>()
@@ -153,9 +152,10 @@ class SohbetActivity : AppCompatActivity() {
                 }
 
 
+                    if(myAdapter==null){
+                        sohbetOdalariListele()
+                    }
 
-
-                    sohbetOdalariListele()
 
 
 
@@ -177,7 +177,7 @@ class SohbetActivity : AppCompatActivity() {
 
     }
 
-    fun sohbetOdasiSil(silinecekSohbetOdasi:SohbetOdasi){
+   /* fun sohbetOdasiSil(silinecekSohbetOdasi:SohbetOdasi){
 
 
         var ref=FirebaseDatabase.getInstance().reference
@@ -192,5 +192,5 @@ class SohbetActivity : AppCompatActivity() {
 
 
 
-    }
+    }*/
 }

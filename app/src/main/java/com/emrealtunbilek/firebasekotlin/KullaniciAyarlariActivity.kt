@@ -362,14 +362,12 @@ class KullaniciAyarlariActivity : AppCompatActivity(), ProfilResmiFragment.onPro
                     var okunanKullanici = singleSnapshot.getValue(Kullanici::class.java)
                     etKullaniciAdi.setText(okunanKullanici?.isim)
                     etKullaniciTelefon.setText(okunanKullanici?.telefon)
-                    if(okunanKullanici?.profil_resmi!!.isNullOrBlank() or okunanKullanici?.profil_resmi!!.isNullOrEmpty()){
-                        Picasso.with(this@KullaniciAyarlariActivity).load(R.drawable.defaultprofilepic).resize(100, 100).into(imgCircleProfil)
-
+                    if(okunanKullanici?.profil_resmi.isNullOrEmpty()){
+                        Picasso.with(this@KullaniciAyarlariActivity).load(R.drawable.defaultprofilepic).resize(100,100).into(imgCircleProfil)
                     }else {
                         Picasso.with(this@KullaniciAyarlariActivity).load(okunanKullanici?.profil_resmi).resize(100, 100).into(imgCircleProfil)
-
                     }
-                    Picasso.with(this@KullaniciAyarlariActivity).load(okunanKullanici?.profil_resmi).resize(100, 100).into(imgCircleProfil)
+
 
                 }
             }

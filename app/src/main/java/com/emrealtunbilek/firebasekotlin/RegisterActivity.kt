@@ -54,7 +54,7 @@ class RegisterActivity : Activity() {
                             var veritabaninaEklenecekKullanici= Kullanici()
                             veritabaninaEklenecekKullanici.isim=etMail.text.toString().substring(0,etMail.text.toString().indexOf("@"))
                             veritabaninaEklenecekKullanici.kullanici_id=FirebaseAuth.getInstance().currentUser?.uid
-                            veritabaninaEklenecekKullanici.profil_resmi=""
+                            veritabaninaEklenecekKullanici.profil_resmi="http://emrealtunbilek.com/wp-content/uploads/2016/10/apple-icon-72x72.png"
                             veritabaninaEklenecekKullanici.telefon="123"
                             veritabaninaEklenecekKullanici.seviye="1"
 

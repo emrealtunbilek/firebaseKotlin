@@ -49,7 +49,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             var bildirim_turu = p0?.data?.get("bildirim_turu")
             var sohbet_odasi_id = p0?.data?.get("sohbet_odasi_id")
 
-            Log.e("FCM", "Başlık : " + baslik + "İçerik : $icerik" + " Bildirim_turu: $bildirim_turu" + " Secilen sohbet odası:" + sohbet_odasi_id)
+          //  Log.e("FCM", "Başlık : " + baslik + "İçerik : $icerik" + " Bildirim_turu: $bildirim_turu" + " Secilen sohbet odası:" + sohbet_odasi_id)
 
             var ref = FirebaseDatabase.getInstance().reference
                     .child("sohbet_odasi")
@@ -98,7 +98,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     private fun bildirimGonder(baslik: String?, icerik: String?, oAnkiSohbetOdasi: SohbetOdasi) {
 
         var bildirimID = notificationIDOlustur(oAnkiSohbetOdasi.sohbetodasi_id!!)
-        Log.e("AAA", "" + bildirimID)
+      //  Log.e("AAA", "" + bildirimID)
 
         var pendingIntent=Intent(this,MainActivity::class.java)
         pendingIntent.flags=Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
